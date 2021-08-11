@@ -5,6 +5,10 @@ VisualStudioVersion = 16.0.31515.178
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PiranhaCMS.Core", "PiranhaCMS.Core\PiranhaCMS.Core.csproj", "{4F2C7EE4-4171-4752-A2B6-D0D06ADE0F6E}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Piranha.Core", "Piranha.Core\Piranha.Core.csproj", "{B5CEB248-769D-4B97-A952-918335576F6E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Piranha.Data", "Piranha.Data\Piranha.Data.csproj", "{6CD77980-B78F-4CC6-9F02-331CEC7F1DE3}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +19,14 @@ Global
 		{4F2C7EE4-4171-4752-A2B6-D0D06ADE0F6E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4F2C7EE4-4171-4752-A2B6-D0D06ADE0F6E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4F2C7EE4-4171-4752-A2B6-D0D06ADE0F6E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B5CEB248-769D-4B97-A952-918335576F6E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B5CEB248-769D-4B97-A952-918335576F6E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B5CEB248-769D-4B97-A952-918335576F6E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B5CEB248-769D-4B97-A952-918335576F6E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6CD77980-B78F-4CC6-9F02-331CEC7F1DE3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6CD77980-B78F-4CC6-9F02-331CEC7F1DE3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6CD77980-B78F-4CC6-9F02-331CEC7F1DE3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6CD77980-B78F-4CC6-9F02-331CEC7F1DE3}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
