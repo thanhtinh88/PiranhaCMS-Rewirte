@@ -85,6 +85,7 @@ namespace Piranha.Data
 		public DbSet<Tag> Tags { get; set; }
 		#endregion
 
+		
 		/// <summary>
 		/// Default constructor. Only uses this for testing purposes or for creating migrations.
 		/// </summary>
@@ -102,6 +103,7 @@ namespace Piranha.Data
         {
 			Database.EnsureCreated();
         }
+		
 
 		/// <summary>
 		/// Configurs the db context.
@@ -113,7 +115,7 @@ namespace Piranha.Data
 			// the local test config
 			if (!builder.IsConfigured)
             {
-				builder.UseSqlServer(@"Server=(localdb)\\MSSQLLocalDB;Database=piranha.blog;Trusted_Connection=True;");
+				builder.UseSqlServer(@"Data Source=(localdb)\MSSQLLocalDB;Database=piranha.blog;Trusted_Connection=True;");
 			}
 			
         }

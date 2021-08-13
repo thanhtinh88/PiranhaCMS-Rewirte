@@ -88,6 +88,23 @@ namespace Piranha.Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Piranha_PostTypes",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(64)", maxLength: 64, nullable: false),
+                    InternalId = table.Column<string>(type: "nvarchar(64)", maxLength: 64, nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
+                    Route = table.Column<string>(type: "nvarchar(128)", maxLength: 128, nullable: true),
+                    Created = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    LastModified = table.Column<DateTime>(type: "datetime2", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Piranha_PostTypes", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Piranha_Tags",
                 columns: table => new
                 {
@@ -98,23 +115,6 @@ namespace Piranha.Data.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Piranha_Tags", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "PostTypes",
-                columns: table => new
-                {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    InternalId = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Route = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Created = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    LastModified = table.Column<DateTime>(type: "datetime2", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_PostTypes", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -237,9 +237,9 @@ namespace Piranha.Data.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        name: "FK_Piranha_Posts_PostTypes_TypeId",
+                        name: "FK_Piranha_Posts_Piranha_PostTypes_TypeId",
                         column: x => x.TypeId,
-                        principalTable: "PostTypes",
+                        principalTable: "Piranha_PostTypes",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                 });
@@ -260,9 +260,9 @@ namespace Piranha.Data.Migrations
                 {
                     table.PrimaryKey("PK_Piranha_PostTypeFields", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Piranha_PostTypeFields_PostTypes_TypeId",
+                        name: "FK_Piranha_PostTypeFields_Piranha_PostTypes_TypeId",
                         column: x => x.TypeId,
-                        principalTable: "PostTypes",
+                        principalTable: "Piranha_PostTypes",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -408,6 +408,12 @@ namespace Piranha.Data.Migrations
                 unique: true);
 
             migrationBuilder.CreateIndex(
+                name: "IX_Piranha_PostTypes_InternalId",
+                table: "Piranha_PostTypes",
+                column: "InternalId",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Piranha_Tags_Slug",
                 table: "Piranha_Tags",
                 column: "Slug",
@@ -456,7 +462,7 @@ namespace Piranha.Data.Migrations
                 name: "Piranha_Categories");
 
             migrationBuilder.DropTable(
-                name: "PostTypes");
+                name: "Piranha_PostTypes");
         }
     }
 }
