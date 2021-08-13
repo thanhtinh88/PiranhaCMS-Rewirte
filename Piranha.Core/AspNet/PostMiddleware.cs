@@ -12,7 +12,7 @@ namespace Piranha.Core.AspNet
         /// Creates a new middleware instance.
         /// </summary>
         /// <param name="next">The next middleware in the pipeline</param>
-        public PostMiddleware(RequestDelegate next): base(next)
+        public PostMiddleware(RequestDelegate next, Api api): base(next, api)
         {
 
         }
@@ -24,32 +24,35 @@ namespace Piranha.Core.AspNet
         /// <returns>An async task</returns>
         public override async Task Invoke(HttpContext context)
         {
-            var url = context.Request.Path.HasValue ? context.Request.Path.Value : "";
-
-            if (!string.IsNullOrWhiteSpace(url) && url.Length >2)
+            if (!IsHandled(context))
             {
-                var segments = url.Substring(1).Split(new char[] { '/' });
-                var category = api.Categories.GetBySlug(segments[0]);
-                if (category != null)
-                {
-                    var post = api.Posts.GetBySlug(category.Id, segments[1]);
-                    if (post != null)
-                    {
-                        var route = post.Route;
-                        if (segments.Length > 2)
-                            route += "/" + segments.Subset(2).Implode("/");
+                var url = context.Request.Path.HasValue ? context.Request.Path.Value : "";
 
-                        context.Request.Path = new PathString(route);
-                        if (context.Request.QueryString.HasValue)
+                if (!string.IsNullOrWhiteSpace(url) && url.Length > 2)
+                {
+                    var segments = url.Substring(1).Split(new char[] { '/' });
+                    var category = api.Categories.GetBySlug(segments[0]);
+                    if (category != null)
+                    {
+                        var post = api.Posts.GetBySlug(category.Id, segments[1]);
+                        if (post != null)
                         {
-                            context.Request.QueryString = new QueryString(context.Request.QueryString.Value + "&id=" + post.Id);
-                        }
-                        else
-                        {
-                            context.Request.QueryString = new QueryString("?id=" + post.Id);
+                            var route = post.Route;
+                            if (segments.Length > 2)
+                                route += "/" + segments.Subset(2).Implode("/");
+
+                            context.Request.Path = new PathString(route);
+                            if (context.Request.QueryString.HasValue)
+                            {
+                                context.Request.QueryString = new QueryString(context.Request.QueryString.Value + "&id=" + post.Id + "&piranha_handled=true");
+                            }
+                            else
+                            {
+                                context.Request.QueryString = new QueryString("?id=" + post.Id + "&piranha_handled=true");
+                            }
                         }
                     }
-                }
+                } 
             }
 
             await next.Invoke(context);

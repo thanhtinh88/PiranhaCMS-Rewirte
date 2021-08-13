@@ -38,6 +38,11 @@ namespace Piranha.Core.Models
         public string Slug { get; set; }
 
         /// <summary>
+        /// Gets/sets the public permalink.
+        /// </summary>
+        public string Permalink { get; set; }
+
+        /// <summary>
         /// Gets/sets the optional meta title.
         /// </summary>
         public string MetaTitle { get; set; }
@@ -56,6 +61,11 @@ namespace Piranha.Core.Models
         /// Gets/sets the available regions.
         /// </summary>
         public dynamic Regions { get; set; }
+
+        /// <summary>
+        /// Gets/sets if this is the site startpage.
+        /// </summary>
+        public bool IsStartPage { get; set; }
 
         /// <summary>
         /// Gets/sets the internal route used by the middleware.

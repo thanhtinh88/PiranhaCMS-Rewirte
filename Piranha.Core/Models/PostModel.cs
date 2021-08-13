@@ -9,7 +9,7 @@ namespace Piranha.Core.Models
     /// <summary>
     /// The client post model.
     /// </summary>
-    public class PostModel
+    public class PostModel : PostListModel
     {
         public PostModel()
         {
@@ -17,21 +17,6 @@ namespace Piranha.Core.Models
         }
 
         #region Properties
-        /// <summary>
-        /// Gets/sets the unique id.
-        /// </summary>
-        public Guid Id { get; set; }
-
-        /// <summary>
-        /// Gets/sets the main title.
-        /// </summary>
-        public string Title { get; set; }
-
-        /// <summary>
-        /// Gets/sets the unique slug.
-        /// </summary>
-        public string Slug { get; set; }
-
         /// <summary>
         /// Gets/sets the optional meta title.
         /// </summary>
@@ -48,11 +33,6 @@ namespace Piranha.Core.Models
         public string MetaDescription { get; set; }
 
         /// <summary>
-        /// Gets/sets the optional excerpt.
-        /// </summary>
-        public string Excerpt { get; set; }
-
-        /// <summary>
         /// Gets/sets the available regions.
         /// </summary>
         public dynamic Regions { get; set; }
@@ -61,21 +41,6 @@ namespace Piranha.Core.Models
         /// Gets/sets the internal route used by the middleware.
         /// </summary>
         internal string Route { get; set; }
-
-        /// <summary>
-        /// Gets/sets the optional published date.
-        /// </summary>
-        public DateTime Published { get; set; }
-
-        /// <summary>
-        /// Gets/sets the created date.
-        /// </summary>
-        public DateTime Created { get; set; }
-
-        /// <summary>
-        /// Gets/sets the last modification date.
-        /// </summary>
-        public DateTime LastModified { get; set; }
         #endregion
     }
 }

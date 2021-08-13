@@ -44,6 +44,14 @@ namespace Piranha.Data.Data
         /// Gets/sets if the page should be hidden in the navigation.
         /// </summary>
         public bool IsHiden { get; set; }
+
+        /// <summary>
+        /// Gets if this is the site startpage.
+        /// </summary>
+        public bool IsStartPage 
+        {
+            get => !ParentId.HasValue && SortOrder == 0;
+        }
         #endregion
 
         #region Notifications

@@ -92,8 +92,19 @@ namespace Piranha.Core
                         // Setup auto mapper
                         mapper = new MapperConfiguration(cfg =>
                         {
-                            cfg.CreateMap<Page, Models.PageModel>().ForMember(m => m.Regions, o => o.Ignore());
-                            cfg.CreateMap<Post, Models.PostModel>().ForMember(m => m.Regions, o => o.Ignore());
+                            cfg.CreateMap<Page, Models.PageModel>()
+                                .ForMember(m => m.Permalink, o => o.Ignore())
+                                .ForMember(m => m.IsStartPage, o => o.Ignore())
+                                .ForMember(m => m.Regions, o => o.Ignore());
+                            cfg.CreateMap<Page, Models.SiteMapModel>()
+                                .ForMember(m => m.Permalink, o => o.Ignore())
+                                .ForMember(m => m.Level, o => o.Ignore())
+                                .ForMember(m => m.Children, o => o.Ignore());
+                            cfg.CreateMap<Post, Models.PostListModel>()
+                                .ForMember(m => m.Permalink, o => o.Ignore());
+                            cfg.CreateMap<Post, Models.PostModel>()
+                                .ForMember(m => m.Permalink, o => o.Ignore())
+                                .ForMember(m => m.Regions, o => o.Ignore());
                         });
                         mapper.AssertConfigurationIsValid();
                         

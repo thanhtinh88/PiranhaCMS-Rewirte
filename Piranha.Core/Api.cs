@@ -17,14 +17,18 @@ namespace Piranha.Core
         public CategoryRepository Categories { get; set; }
         public PageRepository Pages { get; set; }
         public PostRepository Posts { get; set; }
+        public ArchiveRepostiory Archives { get; set; }
+        public SiteMapRepository SiteMap { get; set; }
         #endregion
 
-        public Api()
+        public Api(Db db)
         {
-            db = new Db();
+            this.db = db;
+            Archives = new ArchiveRepostiory(db);
             Categories = new CategoryRepository(db);
             Pages = new PageRepository(db);
             Posts = new PostRepository(db);
+            SiteMap = new SiteMapRepository(db);
         }
 
         public int SaveChanges()

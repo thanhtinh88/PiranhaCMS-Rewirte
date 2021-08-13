@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 namespace Piranha.Core.Repositories
 {
     /// <summary>
-    /// The post model repository.
+    /// The client post repository.
     /// </summary>
     public class PostRepository
     {
@@ -80,8 +80,11 @@ namespace Piranha.Core.Repositories
         {
             // Map basic fields
             var model = App.Mapper.Map<Post, PostModel>(post);
+
+            // Map additional fields
             model.Route = !string.IsNullOrEmpty(post.Route) ? post.Route :
                 !string.IsNullOrEmpty(post.Type.Route) ? post.Type.Route : "/post";
+            model.Permalink = $"~/{post.Category.Slug}/{post.Slug}";
 
             // Map regions
             foreach (var fieldType in post.Type.Fields.Where(f => f.FieldType == FieldType.Region))

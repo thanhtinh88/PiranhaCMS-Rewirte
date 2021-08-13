@@ -24,10 +24,10 @@ namespace Piranha.Core.AspNet
         /// Creates a new middleware instance.
         /// </summary>
         /// <param name="next">The next middleware in the pipeline</param>
-        public MiddlewareBase(RequestDelegate next)
+        public MiddlewareBase(RequestDelegate next, Api api)
         {
             this.next = next;
-            this.api = new Api();
+            this.api = api;
         }
 
         /// <summary>
@@ -36,5 +36,18 @@ namespace Piranha.Core.AspNet
         /// <param name="context">The current http context</param>
         /// <returns>An async task</returns>
         public abstract Task Invoke(HttpContext context);
+
+        /// <summary>
+        /// Checks if the request has already been handled by another Piranha middleware.
+        /// </summary>
+        /// <param name="context">The current http context</param>
+        /// <returns>If the request has already been handled</returns>
+        protected bool IsHandled(HttpContext context)
+        {
+            var values = context.Request.Query["piranha_handled"];
+            if (values.Count > 0)
+                return values[0] == "true";
+            return false;
+        }
     }
 }

@@ -86,12 +86,35 @@ namespace Piranha.Data
 		#endregion
 
 		/// <summary>
+		/// Default constructor. Only uses this for testing purposes or for creating migrations.
+		/// </summary>
+		public Db():base()
+        {
+			Database.EnsureCreated();
+        }
+
+		/// <summary>
+		/// Default constructor.
+		/// </summary>
+		/// <param name="options">The db options</param>
+		public Db(DbContextOptions options): base(options)
+        {
+			Database.EnsureCreated();
+        }
+
+		/// <summary>
 		/// Configurs the db context.
 		/// </summary>
-		/// <param name="optionsBuilder">The current configuration options</param>
-		protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+		/// <param name="builder">The current configuration options</param>
+		protected override void OnConfiguring(DbContextOptionsBuilder builder)
         {
-			optionsBuilder.UseSqlServer(@"Server = (localdb)\mssqllocaldb; Database = piranha.dnx; Trusted_Connection = True;");
+			// Make sure we don't overwrite existing configuration with
+			// the local test config
+			if (!builder.IsConfigured)
+            {
+				builder.UseSqlServer(@"Server=(localdb)\\MSSQLLocalDB;Database=piranha.blog;Trusted_Connection=True;");
+			}
+			
         }
 
 		/// <summary>
@@ -132,6 +155,7 @@ namespace Piranha.Data
 			mb.Entity<Page>().HasOne(p => p.Author).WithMany().OnDelete(DeleteBehavior.SetNull);
 			mb.Entity<Page>().HasOne(p => p.Type).WithMany().OnDelete(DeleteBehavior.Restrict);
 			mb.Entity<Page>().HasIndex(p => p.Slug).IsUnique();
+			mb.Entity<Page>().Ignore(p => p.IsStartPage);
 
 			mb.Entity<PageField>().ToTable("Piranha_PageFields");
 			mb.Entity<PageField>().HasIndex(p => new { p.ParentId, p.TypeId }).IsUnique();
