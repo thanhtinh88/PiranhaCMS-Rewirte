@@ -296,6 +296,9 @@ namespace Piranha.Data.Migrations
                         .HasMaxLength(512)
                         .HasColumnType("nvarchar(512)");
 
+                    b.Property<int>("FieldType")
+                        .HasColumnType("int");
+
                     b.Property<string>("InternalId")
                         .IsRequired()
                         .HasMaxLength(64)
@@ -482,6 +485,9 @@ namespace Piranha.Data.Migrations
                         .IsRequired()
                         .HasMaxLength(512)
                         .HasColumnType("nvarchar(512)");
+
+                    b.Property<int>("FieldType")
+                        .HasColumnType("int");
 
                     b.Property<string>("InternalId")
                         .IsRequired()

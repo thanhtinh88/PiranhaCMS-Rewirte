@@ -1,0 +1,12 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Piranha.Core\Piranha.Core.csproj" />
+    <ProjectReference Include="..\Piranha.Data\Piranha.Data.csproj" />
+  </ItemGroup>
+
+</Project>

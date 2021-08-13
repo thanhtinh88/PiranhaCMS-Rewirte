@@ -53,7 +53,10 @@ namespace Piranha.Data.Data
         /// <param name="db">The current db context</param>
         public void OnSave(Db db)
         {
-            Hooks.Data.Page.OnSave(db, this);
+            if (Hooks.Data.Page.OnSave != null)
+            {
+                Hooks.Data.Page.OnSave(db, this); 
+            }
         }
 
         /// <summary>
@@ -62,7 +65,10 @@ namespace Piranha.Data.Data
         /// <param name="db">The current db context</param>
         public void OnDelete(Db db)
         {
-            Hooks.Data.Page.OnDelete(db, this);
+            if (Hooks.Data.Page.OnDelete != null)
+            {
+                Hooks.Data.Page.OnDelete(db, this); 
+            }
         }
         #endregion
     }

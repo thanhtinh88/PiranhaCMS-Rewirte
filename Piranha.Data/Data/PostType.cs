@@ -17,7 +17,10 @@
         /// <param name="db">The current db context</param>
         public void OnSave(Db db)
         {
-            Hooks.Data.PostType.OnSave(db, this);
+            if (Hooks.Data.PostType.OnSave != null)
+            {
+                Hooks.Data.PostType.OnSave(db, this); 
+            }
         }
 
         /// <summary>
@@ -26,7 +29,10 @@
         /// <param name="db">The current db context</param>
         public void OnDelete(Db db)
         {
-            Hooks.Data.PostType.OnDelete(db, this);
+            if (Hooks.Data.PostType.OnDelete != null)
+            {
+                Hooks.Data.PostType.OnDelete(db, this); 
+            }
         }
         #endregion
     }

@@ -7,7 +7,7 @@ namespace Piranha.Data.Data
     /// <summary>
     /// Hierarchical folders for the media library.
     /// </summary>
-    public sealed class MediaFolder: IModel, INotify
+    public sealed class MediaFolder : IModel, INotify
     {
         #region Properties
         /// <summary>
@@ -33,7 +33,10 @@ namespace Piranha.Data.Data
         /// <param name="db">The current db context</param>
         public void OnSave(Db db)
         {
-            Hooks.Data.MediaFolder.OnSave(db, this);
+            if (Hooks.Data.MediaFolder.OnSave != null)
+            {
+                Hooks.Data.MediaFolder.OnSave(db, this); 
+            }
         }
 
         /// <summary>
@@ -42,7 +45,10 @@ namespace Piranha.Data.Data
         /// <param name="db">The current db context</param>
         public void OnDelete(Db db)
         {
-            Hooks.Data.MediaFolder.OnDelete(db, this);
+            if (Hooks.Data.MediaFolder.OnDelete != null)
+            {
+                Hooks.Data.MediaFolder.OnDelete(db, this); 
+            }
         }
         #endregion
     }

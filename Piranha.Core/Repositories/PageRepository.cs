@@ -121,7 +121,7 @@ namespace Piranha.Core.Repositories
                 !string.IsNullOrEmpty(page.Type.Route) ? page.Type.Route : "/page";
 
             // Map regions
-            foreach (var fieldType in page.Type.Fields)
+            foreach (var fieldType in page.Type.Fields.Where(f => f.FieldType == FieldType.Region))
             {
                 var field = page.Fields.SingleOrDefault(f => f.TypeId == fieldType.Id);
                 if (field != null)

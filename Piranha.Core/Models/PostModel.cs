@@ -35,7 +35,7 @@ namespace Piranha.Core.Models
         /// <summary>
         /// Gets/sets the optional meta title.
         /// </summary>
-        public string MediaTitle { get; set; }
+        public string MetaTitle { get; set; }
 
         /// <summary>
         /// Gets/sets the optional meta keywords.

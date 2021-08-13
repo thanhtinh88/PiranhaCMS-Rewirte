@@ -22,6 +22,11 @@ namespace Piranha.Data.Data.Base
         public Guid TypeId { get; set; }
 
         /// <summary>
+        /// Gets/sets the field type.
+        /// </summary>
+        public FieldType FieldType { get; set; }
+
+        /// <summary>
         /// Gets/sets the display name.
         /// </summary>
         public string Name { get; set; }

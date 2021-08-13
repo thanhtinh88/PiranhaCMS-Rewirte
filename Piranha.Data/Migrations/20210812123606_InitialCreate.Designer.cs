@@ -10,7 +10,7 @@ using Piranha.Data;
 namespace Piranha.Data.Migrations
 {
     [DbContext(typeof(Db))]
-    [Migration("20210811155846_InitialCreate")]
+    [Migration("20210812123606_InitialCreate")]
     partial class InitialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -298,6 +298,9 @@ namespace Piranha.Data.Migrations
                         .HasMaxLength(512)
                         .HasColumnType("nvarchar(512)");
 
+                    b.Property<int>("FieldType")
+                        .HasColumnType("int");
+
                     b.Property<string>("InternalId")
                         .IsRequired()
                         .HasMaxLength(64)
@@ -484,6 +487,9 @@ namespace Piranha.Data.Migrations
                         .IsRequired()
                         .HasMaxLength(512)
                         .HasColumnType("nvarchar(512)");
+
+                    b.Property<int>("FieldType")
+                        .HasColumnType("int");
 
                     b.Property<string>("InternalId")
                         .IsRequired()

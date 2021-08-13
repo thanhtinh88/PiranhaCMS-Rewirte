@@ -185,6 +185,7 @@ namespace Piranha.Data.Migrations
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     TypeId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    FieldType = table.Column<int>(type: "int", nullable: false),
                     Name = table.Column<string>(type: "nvarchar(64)", maxLength: 64, nullable: false),
                     InternalId = table.Column<string>(type: "nvarchar(64)", maxLength: 64, nullable: false),
                     CLRType = table.Column<string>(type: "nvarchar(512)", maxLength: 512, nullable: false),
@@ -249,6 +250,7 @@ namespace Piranha.Data.Migrations
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     TypeId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    FieldType = table.Column<int>(type: "int", nullable: false),
                     Name = table.Column<string>(type: "nvarchar(64)", maxLength: 64, nullable: false),
                     InternalId = table.Column<string>(type: "nvarchar(64)", maxLength: 64, nullable: false),
                     CLRType = table.Column<string>(type: "nvarchar(512)", maxLength: 512, nullable: false),
