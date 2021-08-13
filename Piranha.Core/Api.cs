@@ -7,18 +7,18 @@ using System.Threading.Tasks;
 
 namespace Piranha.Core
 {
-    public class Api : IDisposable
+    public class Api : IApi
     {
         #region Members
         private readonly Db db;
         #endregion
 
         #region Properties
-        public CategoryRepository Categories { get; set; }
-        public PageRepository Pages { get; set; }
-        public PostRepository Posts { get; set; }
-        public ArchiveRepostiory Archives { get; set; }
-        public SiteMapRepository SiteMap { get; set; }
+        public ICategoryRepository Categories { get; }
+        public IPageRepository Pages { get; }
+        public IPostRepository Posts { get;  }
+        public IArchiveRepostiory Archives { get;  }
+        public ISiteMapRepository SiteMap { get; }
         #endregion
 
         public Api(Db db)

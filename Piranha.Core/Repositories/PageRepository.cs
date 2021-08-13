@@ -1,18 +1,17 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Piranha.Core.Models;
 using Piranha.Data;
 using Piranha.Data.Data;
-using Piranha.Core.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 
 namespace Piranha.Core.Repositories
 {
     /// <summary>
     /// The client page repository
     /// </summary>
-    public class PageRepository
+    public class PageRepository : IPageRepository
     {
         #region Members
         /// <summary>
@@ -40,7 +39,7 @@ namespace Piranha.Core.Repositories
         /// </summary>
         /// <typeparam name="T">The model type</typeparam>
         /// <returns>The page model</returns>
-        public T GetStartPage<T>() where T: PageModel
+        public T GetStartPage<T>() where T : PageModel
         {
             var page = FullQuery()
                .Where(p => p.ParentId == null && p.SortOrder == 0 && p.Published <= DateTime.Now)
@@ -67,7 +66,7 @@ namespace Piranha.Core.Repositories
         /// <typeparam name="T">The model type</typeparam>
         /// <param name="id">The unique id</param>
         /// <returns>The page model</returns>
-        public T GetById<T>(Guid id) where T: PageModel
+        public T GetById<T>(Guid id) where T : PageModel
         {
             var page = FullQuery()
                 .Where(p => p.Id == id && p.Published <= DateTime.Now)
@@ -94,8 +93,8 @@ namespace Piranha.Core.Repositories
         /// <typeparam name="T">The model type</typeparam>
         /// <param name="slug">The unique slug</param>
         /// <returns>The page model</returns>
-        public T GetBySlug<T>(string slug) where T: PageModel
-        { 
+        public T GetBySlug<T>(string slug) where T : PageModel
+        {
             var page = FullQuery()
                 .Where(p => p.Slug == slug && p.Published <= DateTime.Now)
                 .SingleOrDefault();
@@ -146,12 +145,12 @@ namespace Piranha.Core.Repositories
         /// </summary>
         /// <param name="page">The page</param>
         /// <returns>The transformed model</returns>
-        private T FullTransform<T>(Page page) where T:PageModel
+        private T FullTransform<T>(Page page) where T : PageModel
         {
             var model = Activator.CreateInstance<T>();
             App.Mapper.Map<Page, PageModel>(page, model);
 
-            model.Route = !string.IsNullOrEmpty(page.Route) ? page.Route : 
+            model.Route = !string.IsNullOrEmpty(page.Route) ? page.Route :
                 !string.IsNullOrEmpty(page.Type.Route) ? page.Type.Route : "/page";
 
             model.Permalink = $"~/{page.Slug}";

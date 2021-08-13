@@ -10,7 +10,7 @@ namespace Piranha.Core.Repositories
     /// <summary>
     /// The client category repository.
     /// </summary>
-    public class CategoryRepository
+    public class CategoryRepository : ICategoryRepository
     {
         #region Members
         private readonly Db db;

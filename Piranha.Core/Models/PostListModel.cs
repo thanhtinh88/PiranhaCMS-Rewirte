@@ -31,6 +31,11 @@ namespace Piranha.Core.Models
         public string Permalink { get; set; }
 
         /// <summary>
+        /// Gets/sets the category.
+        /// </summary>
+        public CategoryModel Category { get; set; }
+
+        /// <summary>
         /// Gets/sets the optional excerpt.
         /// </summary>
         public string Excerpt { get; set; }

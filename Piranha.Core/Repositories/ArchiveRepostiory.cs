@@ -11,7 +11,7 @@ namespace Piranha.Core.Repositories
     /// <summary>
     /// The client archive repository.
     /// </summary>
-    public class ArchiveRepostiory
+    public class ArchiveRepostiory : IArchiveRepostiory
     {
         #region Members
         /// <summary>
@@ -96,7 +96,7 @@ namespace Piranha.Core.Repositories
 
                 // Map & add the posts within the requested page
                 var mapper = App.Mapper;
-                for (int n = (model.Page -1)*ArchivePageSize ; n < Math.Min(model.Page*ArchivePageSize, posts.Count); n++)
+                for (int n = (model.Page - 1) * ArchivePageSize; n < Math.Min(model.Page * ArchivePageSize, posts.Count); n++)
                 {
                     // Map fields
                     var post = mapper.Map<Data.Data.Post, PostListModel>(posts[n]);

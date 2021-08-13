@@ -10,7 +10,7 @@ namespace Piranha.Core.Repositories
     /// <summary>
     /// The client site map repository.
     /// </summary>
-    public class SiteMapRepository
+    public class SiteMapRepository : ISiteMapRepository
     {
         #region Members
         /// <summary>

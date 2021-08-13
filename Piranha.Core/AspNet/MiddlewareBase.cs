@@ -17,14 +17,14 @@ namespace Piranha.Core.AspNet
         /// <summary>
         /// The current api.
         /// </summary>
-        protected readonly Api api;
+        protected readonly IApi api;
         #endregion
 
         /// <summary>
         /// Creates a new middleware instance.
         /// </summary>
         /// <param name="next">The next middleware in the pipeline</param>
-        public MiddlewareBase(RequestDelegate next, Api api)
+        public MiddlewareBase(RequestDelegate next, IApi api)
         {
             this.next = next;
             this.api = api;
