@@ -33,12 +33,17 @@ namespace Piranha.Core
         /// <summary>
         /// The private extension manager
         /// </summary>
-        private Extend.ExtensionManager extensionManager;
+        private ExtensionManager extensionManager;
 
         /// <summary>
         /// The private auto mapper configuration.
         /// </summary>
         private MapperConfiguration mapper;
+
+        /// <summary>
+		/// The private storage factory.
+		/// </summary>
+        private Server.IStorageFactory storageFactory;
         #endregion
 
         private App() { }
@@ -50,6 +55,14 @@ namespace Piranha.Core
         public static ExtensionManager ExtensionManager
         {
             get => instance.extensionManager;
+        }
+
+        /// <summary>
+		/// Gets the current storage factory.
+		/// </summary>
+		public static Server.IStorageFactory Storage
+        {
+            get { return instance.storageFactory; }
         }
 
         /// <summary>
@@ -86,6 +99,10 @@ namespace Piranha.Core
                 {
                     if (!isInitialized)
                     {
+                        // Configure the app object
+                        if (config.Storage != null)
+                            storageFactory = config.Storage;
+
                         // Create & compose the extension manager
                         extensionManager = new ExtensionManager().Compose();
 
