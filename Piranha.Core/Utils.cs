@@ -5,7 +5,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
-namespace Piranha.Core
+namespace Piranha
 {
     /// <summary>
     /// Utility methods

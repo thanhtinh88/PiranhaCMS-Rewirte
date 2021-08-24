@@ -1,16 +1,13 @@
-﻿using AutoMapper;
-using Piranha.Data;
-using Piranha.Data.Data;
-using Piranha.Core.Extend;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Reflection;
 
-namespace Piranha.Core
+namespace Piranha
 {
     /// <summary>
-    /// The main Piranha application object.
+    /// The main application object.
     /// </summary>
     public sealed class App
     {
@@ -21,77 +18,80 @@ namespace Piranha.Core
         private static readonly App instance = new App();
 
         /// <summary>
-        /// The private application state.
-        /// </summary>
-        private bool isInitialized = false;
-
-        /// <summary>
         /// The private initialization mutex.
         /// </summary>
         private object mutext = new object();
 
         /// <summary>
-        /// The private extension manager
+        /// The private application state.
         /// </summary>
-        private ExtensionManager extensionManager;
+        private bool isInitialized = false;
 
-        /// <summary>
-        /// The private auto mapper configuration.
-        /// </summary>
-        private MapperConfiguration mapper;
-
-        /// <summary>
-		/// The private storage factory.
-		/// </summary>
-        private Server.IStorageFactory storageFactory;
+        private Extend.FieldInfoList fields;
+        private List<Extend.IModule> modules;
+        private IList<Extend.BlockType> blockTypes;
+        private IList<Extend.PageType> pageTypes;
         #endregion
 
-        private App() { }
-
-        #region Static properties
+        #region Properties
         /// <summary>
         /// Gets the current extension manager.
         /// </summary>
-        public static ExtensionManager ExtensionManager
+        public static Extend.FieldInfoList Fields
         {
-            get => instance.extensionManager;
+            get => instance.fields;
         }
 
         /// <summary>
 		/// Gets the current storage factory.
 		/// </summary>
-		public static Server.IStorageFactory Storage
+		public static IList<Extend.IModule> Modules
         {
-            get { return instance.storageFactory; }
+            get { return instance.modules; }
+        }
+
+        public static IList<Extend.PageType> PageTypes
+        {
+            get { return instance.pageTypes; }
+        }
+
+        public static IList<Extend.BlockType> BlockTypes
+        {
+            get { return instance.blockTypes; }
         }
 
         /// <summary>
         /// Gets a mapper instance.
         /// </summary>
-        public static IMapper Mapper
+        public static BindingFlags PropertyBindings
         {
-            get => instance.mapper.CreateMapper();
+            get { return BindingFlags.IgnoreCase | BindingFlags.Public | BindingFlags.Instance; }
         }
         #endregion
+
+        private App() 
+        {
+            fields = new Extend.FieldInfoList();
+            modules = new List<Extend.IModule>();
+            blockTypes = new List<Extend.BlockType>();
+            pageTypes = new List<Extend.PageType>();
+        }
+
 
         /// <summary>
         /// Initializes the application.
         /// </summary>
         /// <param name="configurate">Action for configurating the application</param>
-        public static void Init(Action<AppConfig> configurate = null)
-        {
-            var config = new AppConfig();
-
-            if (configurate != null)
-                configurate(config);
-            instance.Initialize(config);
+        public static void Init(IApi api, Extend.IModule[] modules = null)
+        {            
+            instance.Initialize(api, modules);
         }
 
         #region Private methods
         /// <summary>
         /// Initializes the application instance.
         /// </summary>
-        private void Initialize(AppConfig config)
+        private void Initialize(IApi api, Extend.IModule[] modules = null)
         {
             if (!isInitialized)
             {
@@ -99,33 +99,20 @@ namespace Piranha.Core
                 {
                     if (!isInitialized)
                     {
-                        // Configure the app object
-                        if (config.Storage != null)
-                            storageFactory = config.Storage;
+                        // Compose field types
+                        fields.Register<Extend.Fields.HtmlField>();
+                        fields.Register<Extend.Fields.StringField>();
+                        fields.Register<Extend.Fields.TextField>();
 
-                        // Create & compose the extension manager
-                        extensionManager = new ExtensionManager().Compose();
+                        // Get page types
+                        pageTypes = api.PageTypes.Get();
 
-                        // Setup auto mapper
-                        mapper = new MapperConfiguration(cfg =>
+                        // Compose $ initialize modules
+                        foreach (var module in modules)
                         {
-                            cfg.CreateMap<Category, Models.CategoryModel>();
-                            cfg.CreateMap<Page, Models.PageModel>()
-                                .ForMember(m => m.Permalink, o => o.Ignore())
-                                .ForMember(m => m.IsStartPage, o => o.Ignore())
-                                .ForMember(m => m.Regions, o => o.Ignore());
-                            cfg.CreateMap<Page, Models.SiteMapModel>()
-                                .ForMember(m => m.Permalink, o => o.Ignore())
-                                .ForMember(m => m.Level, o => o.Ignore())
-                                .ForMember(m => m.Children, o => o.Ignore());
-                            cfg.CreateMap<Post, Models.PostListModel>()
-                                .ForMember(m => m.Permalink, o => o.Ignore());
-                            cfg.CreateMap<Post, Models.PostModel>()
-                                .ForMember(m => m.Permalink, o => o.Ignore())
-                                .ForMember(m => m.Regions, o => o.Ignore());
-                        });
-                        mapper.AssertConfigurationIsValid();
-                        
+                            module.Init();
+                            this.modules.Add(module);
+                        }
                         isInitialized = true;
                     }
                 }

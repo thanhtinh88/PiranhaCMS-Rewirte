@@ -4,23 +4,38 @@ using System.Dynamic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Piranha.Core.Models
+namespace Piranha.Models
 {
     /// <summary>
     /// The client post model.
     /// </summary>
-    public class PostModel : PostListModel
+    public class PostModel
     {
         public PostModel()
         {
-            Regions = new ExpandoObject();
+            Tags = new List<Tag>();
         }
 
         #region Properties
         /// <summary>
-        /// Gets/sets the optional meta title.
+        /// Gets/sets the unique id.
         /// </summary>
-        public string MetaTitle { get; set; }
+        public Guid Id { get; set; }
+
+        /// <summary>
+        /// Gets/sets the main title.
+        /// </summary>
+        public string Title { get; set; }
+
+        /// <summary>
+        /// Gets/sets the unique slug.
+        /// </summary>
+        public string Slug { get; set; }
+
+        /// <summary>
+        /// Gets/sets the public permalink.
+        /// </summary>
+        public string Permalink { get; set; }
 
         /// <summary>
         /// Gets/sets the optional meta keywords.
@@ -33,14 +48,45 @@ namespace Piranha.Core.Models
         public string MetaDescription { get; set; }
 
         /// <summary>
-        /// Gets/sets the available regions.
+        /// Gets/sets the optional excerpt.
         /// </summary>
-        public dynamic Regions { get; set; }
+        public string Excerpt { get; set; }
+
+        /// <summary>
+        /// Gets/sets the main post body.
+        /// </summary>
+        public string Body { get; set; }
+
 
         /// <summary>
         /// Gets/sets the internal route used by the middleware.
         /// </summary>
-        internal string Route { get; set; }
+        public string Route { get; set; }
+
+        /// <summary>
+        /// Gets/sets the optional published date.
+        /// </summary>
+        public DateTime? Published { get; set; }
+
+        /// <summary>
+        /// Gets/sets the created date.
+        /// </summary>
+        public DateTime Created { get; set; }
+
+        /// <summary>
+        /// Gets/sets the last modification date.
+        /// </summary>
+        public DateTime LastModified { get; set; }
+
+        /// <summary>
+        /// Gets/sets the category.
+        /// </summary>
+        public Category Category { get; set; }
+
+        /// <summary>
+        /// Gets/sets the available regions.
+        /// </summary>
+        public IList<Tag> Tags { get; set; }
         #endregion
     }
 }

@@ -1,6 +1,6 @@
 ﻿using Blog.Models;
 using Microsoft.AspNetCore.Mvc;
-using Piranha.Core;
+using Piranha;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -30,6 +30,19 @@ namespace Blog.Controllers
         }
 
         /// <summary>
+		/// Gets the archive for the category with the specified id.
+		/// </summary>
+		/// <param name="id">The category id</param>
+		/// <param name="year">The optional year</param>
+		/// <param name="month">The optional month</param>
+		/// <param name="page">The optional page</param>
+        [Route("archive")]
+        public IActionResult Archive(Guid id, int? year = null, int? month = null, int? page = null)
+        {
+            return View(api.Archives.GetById(id, page, year, month));
+        }
+
+        /// <summary>
 		/// Gets the page with the specified id.
 		/// </summary>
 		/// <param name="id">The unique id</param>
@@ -39,12 +52,7 @@ namespace Blog.Controllers
         {
             if (startpage)
             {
-                var model = api.Pages.GetById<StartModel>(id);
-                var cat = api.Categories.GetBySlug("blog");
-
-                model.Archive = api.Archives.GetByCategoryId(cat.Id);
-
-                return View("Start", model);
+                return View("Start", api.Pages.GetById(id));
             }
             return View(api.Pages.GetById(id));
         }

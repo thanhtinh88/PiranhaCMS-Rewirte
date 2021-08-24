@@ -2,11 +2,8 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Piranha.Core.Models
+namespace Piranha.Models
 {
-    /// <summary>
-    /// The client archive model.
-    /// </summary>
     public class ArchiveModel
     {
         #region Properties
@@ -26,14 +23,14 @@ namespace Piranha.Core.Models
         public string Slug { get; set; }
 
         /// <summary>
-        /// Gets/sets the optional description.
+        /// Gets/sets the meta keywords.
         /// </summary>
-        public string Description { get; set; }
+        public string MetaKeywords { get; set; }
 
         /// <summary>
-        /// Gets/sets the optional route.
+        /// Gets/sets the meta description..
         /// </summary>
-        public string Route { get; set; }
+        public string MetaDescription { get; set; }
 
         /// <summary>
         /// Gets/sets the currently requested year.
@@ -51,19 +48,24 @@ namespace Piranha.Core.Models
         public int Page { get; set; }
 
         /// <summary>
-        /// Gets/sets the total page count.
+        /// Gets/sets the total number of pages available.
         /// </summary>
-        public int PageCount { get; set; }
+        public int TotalPages { get; set; }
+
+        /// <summary>
+        /// Gets/sets the optional route.
+        /// </summary>
+        public string Route { get; set; }
 
         /// <summary>
         /// Gets/sets the available posts.
         /// </summary>
-        public IList<PostListModel> Posts { get; set; }
+        public IList<PostModel> Posts { get; set; }
         #endregion
 
         public ArchiveModel()
         {
-            Posts = new List<PostListModel>();
+            Posts = new List<PostModel>();
         }
     }
 }

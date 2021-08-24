@@ -4,28 +4,86 @@ using System.Dynamic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Piranha.Core.Models
+namespace Piranha.Models
 {
     /// <summary>
-    /// The client page model.
+    /// Dynamic page model.
     /// </summary>
-    public class PageModel
+    public class PageModel : PageModel<PageModel>
     {
-        public PageModel()
+        #region Properties
+        /// <summary>
+        /// Gets/ sets the regions.
+        /// </summary>
+        public dynamic Regions { get; set; }
+        #endregion
+
+        public PageModel() : base()
         {
             Regions = new ExpandoObject();
         }
+    }
 
+    /// <summary>
+    /// Generic page model.
+    /// </summary>
+    /// <typeparam name="T">The model type</typeparam>
+    public class PageModel<T>: PageModelBase where T: PageModel<T>
+    {
         #region Properties
         /// <summary>
-        /// Gets/sets the unique id.
+        /// Gets if this is the startpage of the site.
         /// </summary>
-        public Guid Id { get; set; }
+        public bool IsStartPage
+        {
+            get { return !ParentId.HasValue && SortOrder == 0; }
+        }
+        #endregion
 
         /// <summary>
-        /// Gets/sets the main title.
+        /// Creates a new page model using the given page type id.
         /// </summary>
-        public string Title { get; set; }
+        /// <param name="typeId">The unique page type id</param>
+        /// <returns>The new model</returns>
+        public static T Create(string typeId)
+        {
+            using (var factory = new ContentFactory(App.PageTypes))
+            {
+                return factory.Create<T>(typeId);
+            }
+        }
+
+        /// <summary>
+        /// Creates a new region.
+        /// </summary>
+        /// <param name="typeId">The page type id</param>
+        /// <param name="regionId">The region id</param>
+        /// <returns>The new region value</returns>
+        public static object CreateRegion(string typeId, string regionId)
+        {
+            using (var factory = new ContentFactory(App.PageTypes))
+            {
+                return factory.CreateRegion(typeId, regionId);
+            }
+        }
+    }
+
+
+    /// <summary>
+    /// Base class for page model.
+    /// </summary>
+    public abstract class PageModelBase: Content
+    {
+        #region Properties
+        /// <summary>
+        /// Gets/sets the optional parent id.
+        /// </summary>
+        public Guid? ParentId { get; set; }
+
+        /// <summary>
+        /// Gets/sets the sort order of the page in its hierarchical position.
+        /// </summary>
+        public int SortOrder { get; set; }
 
         /// <summary>
         /// Gets/sets the navigation title.
@@ -38,16 +96,6 @@ namespace Piranha.Core.Models
         public string Slug { get; set; }
 
         /// <summary>
-        /// Gets/sets the public permalink.
-        /// </summary>
-        public string Permalink { get; set; }
-
-        /// <summary>
-        /// Gets/sets the optional meta title.
-        /// </summary>
-        public string MetaTitle { get; set; }
-
-        /// <summary>
         /// Gets/sets the optional meta keywords.
         /// </summary>
         public string MetaKeywords { get; set; }
@@ -58,34 +106,9 @@ namespace Piranha.Core.Models
         public string MetaDescription { get; set; }
 
         /// <summary>
-        /// Gets/sets the available regions.
-        /// </summary>
-        public dynamic Regions { get; set; }
-
-        /// <summary>
-        /// Gets/sets if this is the site startpage.
-        /// </summary>
-        public bool IsStartPage { get; set; }
-
-        /// <summary>
         /// Gets/sets the internal route used by the middleware.
         /// </summary>
-        internal string Route { get; set; }
-
-        /// <summary>
-        /// Gets/sets the optional published date.
-        /// </summary>
-        public DateTime Published { get; set; }
-
-        /// <summary>
-        /// Gets/sets the created date.
-        /// </summary>
-        public DateTime Created { get; set; }
-
-        /// <summary>
-        /// Gets/sets the last modification date.
-        /// </summary>
-        public DateTime LastModified { get; set; }
+        public string Route { get; set; }
         #endregion
     }
 }
