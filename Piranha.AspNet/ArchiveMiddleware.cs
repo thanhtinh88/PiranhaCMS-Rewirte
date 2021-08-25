@@ -8,20 +8,11 @@ namespace Piranha.AspNet
 {
     public class ArchiveMiddleware: MiddlewareBase
     {
-        /// <summary>
-        /// Creates a new middleware instance.
-        /// </summary>
-        /// <param name="next">The next middleware in the pipeline</param>
         public ArchiveMiddleware(RequestDelegate next, IApi api): base(next, api)
         {
 
         }
 
-        /// <summary>
-        /// Invokes the middleware.
-        /// </summary>
-        /// <param name="context">The current http context</param>
-        /// <returns>An async task</returns>
         public override async Task Invoke(HttpContext context)
         {
             if (!IsHandled(context))
@@ -31,7 +22,6 @@ namespace Piranha.AspNet
                 if (!string.IsNullOrWhiteSpace(url) && url.Length > 1)
                 {
                     var segments = url.Substring(1).Split(new char[] { '/' });
-
                     if (segments.Length >= 1)
                     {
                         var category = api.Categories.GetModelBySlug(segments[0]);
@@ -39,7 +29,6 @@ namespace Piranha.AspNet
                         if (category != null)
                         {
                             var route = category.ArchiveRoute ?? "/archive";
-
                             int? page = null;
                             int? year = null;
                             int? month = null;
