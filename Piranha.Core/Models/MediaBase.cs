@@ -5,9 +5,9 @@ using System.Text;
 namespace Piranha.Models
 {
     /// <summary>
-    /// Abstract base class for templated content.
+    /// An uploaded media file
     /// </summary>
-    public class Content
+    public sealed class MediaBase
     {
         #region Properties
         /// <summary>
@@ -16,19 +16,24 @@ namespace Piranha.Models
         public Guid Id { get; set; }
 
         /// <summary>
-        /// Gets/sets the content type id.
+        /// Gets/sets the filename.
         /// </summary>
-        public string TypeId { get; set; }
+        public string FileName { get; set; }
 
         /// <summary>
-        /// Gets/sets the title.
+        /// Gets/sets the size of the uploaded asset.
         /// </summary>
-        public string Title { get; set; }
+        public long FileSize { get; set; }
 
         /// <summary>
-        /// Gets/sets the published date.
+        /// Gets/sets the content type.
         /// </summary>
-        public DateTime? Published { get; set; }
+        public string ContentType { get; set; }
+
+        /// <summary>
+        /// Gets/sets the public url.
+        /// </summary>
+        public string PublicUrl { get; set; }
 
         /// <summary>
         /// Gets/sets the created date.
@@ -36,9 +41,10 @@ namespace Piranha.Models
         public DateTime Created { get; set; }
 
         /// <summary>
-        /// Gets/sets the last modification date.
+        /// Gets/sets the last modified date.
         /// </summary>
         public DateTime LastModified { get; set; }
         #endregion
+
     }
 }

@@ -7,7 +7,7 @@ namespace Piranha.Models
     /// <summary>
     /// Interface for accessing the meta data of a region list.
     /// </summary>
-    public interface IRegionList
+    public interface IPageRegionList
     {
         /// <summary>
         /// Gets/sets the page type id.
