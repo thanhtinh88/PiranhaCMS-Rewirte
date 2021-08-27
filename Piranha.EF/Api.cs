@@ -1,5 +1,4 @@
-﻿using Piranha.Data;
-using Piranha.Repositories;
+﻿using Piranha.Repositories;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -21,11 +20,6 @@ namespace Piranha.EF
         /// Gets the archive repository.
         /// </summary>
         public IArchiveRepostiory Archives { get; }
-
-        /// <summary>
-        /// Gets the block type repository.
-        /// </summary>
-        public IBlockTypeRepository BlockTypes { get; }
 
         /// <summary>
         /// Gets the category repository.
@@ -51,10 +45,10 @@ namespace Piranha.EF
         public Api(Db db)
         {
             this.db = db;
+
             Archives = new Repositories.ArchiveRepostiory(db);
-            BlockTypes = new Repositories.BlockTypeRepository(db);
             Categories = new Repositories.CategoryRepository(db);
-            Pages = new Repositories.PageRepository(db);
+            Pages = new Repositories.PageRepository(this, db);
             PageTypes = new Repositories.PageTypeRepository(db);
             Posts = new Repositories.PostRepository(db);            
         }

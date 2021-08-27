@@ -4,16 +4,13 @@ using System.Text;
 
 namespace Piranha.EF.Data
 {
-    /// <summary>
-    /// Page fields hold the actual content of the pages. 
-    /// </summary>
-    public sealed class PageType: ICreated, IModified
+    public class PageType: ICreated, IModified
     {
         #region Properties
         /// <summary>
         /// Gets/sets the unique id.
         /// </summary>
-        public Guid Id { get; set; }
+        public string Id { get; set; }
 
         /// <summary>
         /// Gets/sets the JSON serialized body of the page type.

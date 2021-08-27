@@ -8,7 +8,7 @@ namespace Piranha.Models
     /// Region list for dynamic page models.
     /// </summary>
     /// <typeparam name="T">The item type</typeparam>
-    public class PageRegionList<T> : List<T>, IRegionList
+    public class PageRegionList<T> : List<T>, IPageRegionList
     {
         /// <summary>
         /// Gets/sets the page type id.

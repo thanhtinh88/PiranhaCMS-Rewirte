@@ -74,4 +74,5 @@ namespace Piranha.Models
         /// </summary>
         public DateTime LastModified { get; set; }
     }
+    #endregion
 }

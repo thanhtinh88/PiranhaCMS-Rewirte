@@ -13,21 +13,6 @@ namespace Piranha.EF
     {
 		#region Properties
 		/// <summary>
-		/// Gets/sets the author set.
-		/// </summary>
-		public DbSet<Block> Blocks { get; set; }
-
-		/// <summary>
-		/// Gets/sets the category set.
-		/// </summary>
-		public DbSet<BlockField> BlockFields { get; set; }
-
-		/// <summary>
-		/// Gets/sets the media set.
-		/// </summary>
-		public DbSet<BlockType> BlockTypes { get; set; }
-
-		/// <summary>
 		/// Gets/sets the media folder set.
 		/// </summary>
 		public DbSet<Category> Categories { get; set; }
@@ -64,7 +49,8 @@ namespace Piranha.EF
 		/// <param name="options">The db options</param>
 		public Db(DbContextOptions<Db> options): base(options)
         {
-			Database.EnsureCreated();
+			// Ensure that the database is created & in sync
+			Database.Migrate();
         }
 
 		/// <summary>
@@ -77,6 +63,10 @@ namespace Piranha.EF
 			return base.SaveChanges();
 		}
 
+		/// <summary>
+		/// Saves the changes made to the context.
+		/// </summary>
+		/// <returns>The number of saved rows</returns>
 		public override int SaveChanges(bool acceptAllChangesOnSuccess)
         {
 			OnSave();
@@ -112,20 +102,6 @@ namespace Piranha.EF
 		/// <param name="mb">The model builder</param>
 		protected override void OnModelCreating(ModelBuilder mb)
 		{
-			mb.Entity<Block>().ToTable("Piranha_Blocks");
-			mb.Entity<Block>().Property(b => b.TypeId).IsRequired().HasMaxLength(32);
-			mb.Entity<Block>().Property(b => b.Title).IsRequired().HasMaxLength(128);
-			mb.Entity<Block>().Property(b => b.View).HasMaxLength(255);
-
-			mb.Entity<BlockField>().ToTable("Piranha_BlockFields");
-			mb.Entity<BlockField>().Property(f => f.RegionId).IsRequired().HasMaxLength(32);
-			mb.Entity<BlockField>().Property(f => f.FieldId).IsRequired().HasMaxLength(32);
-			mb.Entity<BlockField>().Property(f => f.CLRType).IsRequired().HasMaxLength(255);
-			mb.Entity<BlockField>().HasIndex(f => new { f.BlockId, f.RegionId, f.FieldId, f.SortOrder }).IsUnique();
-
-			mb.Entity<BlockType>().ToTable("Piranha_BlockTypes");
-			mb.Entity<BlockType>().Property(t => t.Id).IsRequired().HasMaxLength(32);
-
 			mb.Entity<Category>().ToTable("Piranha_Categories");
 			mb.Entity<Category>().Property(c => c.Title).IsRequired().HasMaxLength(64);
 			mb.Entity<Category>().Property(c => c.Slug).IsRequired().HasMaxLength(64);
@@ -133,7 +109,7 @@ namespace Piranha.EF
 			mb.Entity<Category>().HasIndex(c => c.Slug).IsUnique();
 
 			mb.Entity<Page>().ToTable("Piranha_Pages");
-			mb.Entity<Page>().Property(p => p.TypeId).IsRequired().HasMaxLength(32);
+			mb.Entity<Page>().Property(p => p.PageTypeId).IsRequired().HasMaxLength(32);
 			mb.Entity<Page>().Property(p => p.Title).IsRequired().HasMaxLength(128);
 			mb.Entity<Page>().Property(p => p.Slug).IsRequired().HasMaxLength(128);
 			mb.Entity<Page>().Property(p => p.NavigationTitle).HasMaxLength(128);

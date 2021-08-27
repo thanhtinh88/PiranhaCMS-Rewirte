@@ -13,10 +13,6 @@ namespace Piranha
 		/// </summary>
         IArchiveRepostiory Archives { get; }
 
-        /// <summary>
-        /// Gets the block type repository.
-        /// </summary>
-        IBlockTypeRepository BlockTypes { get; }
 
         /// <summary>
 		/// Gets the category repository.

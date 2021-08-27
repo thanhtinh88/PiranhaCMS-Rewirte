@@ -7,7 +7,7 @@ namespace Piranha.EF.Data
     /// <summary>
     /// Categories are used to organize posts.
     /// </summary>
-    public sealed class Category: Models.Category, IModel, ISlug, ICreated, IModified
+    public class Category: Models.Category, IModel, ISlug, ICreated, IModified
     {
         #region Properties
         /// <summary>

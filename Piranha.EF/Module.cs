@@ -7,7 +7,14 @@ namespace Piranha.EF
 {
     public class Module: Extend.IModule
     {
+        /// <summary>
+        /// Gets the mapper.
+        /// </summary>
         public static IMapper Mapper { get; set; }
+
+        /// <summary>
+        /// Initializes the module.
+        /// </summary>
         public void Init()
         {
             var config = new MapperConfiguration(cfg =>
@@ -28,12 +35,12 @@ namespace Piranha.EF
                     .ForMember(m => m.Created, o => o.Ignore())
                     .ForMember(m => m.LastModified, o => o.Ignore());
 
-                cfg.CreateMap<Data.Page, Models.PageModelBase>();
-                cfg.CreateMap<Models.PageModelBase, Data.Page>()
+                cfg.CreateMap<Data.Page, Models.PageBase>();
+                cfg.CreateMap<Models.PageBase, Data.Page>()
                     .ForMember(m => m.Id, o => o.Ignore())
                     .ForMember(m => m.Created, o => o.Ignore())
                     .ForMember(m => m.LastModified, o => o.Ignore())
-                    .ForMember(m => m.Type, o => o.Ignore())
+                    .ForMember(m => m.PageType, o => o.Ignore())
                     .ForMember(m => m.Fields, o => o.Ignore());
 
                 cfg.CreateMap<Data.Post, Models.PostModel>()

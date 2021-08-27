@@ -23,10 +23,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Piranha.AspNet", "Piranha.A
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Piranha.Core", "Piranha.Core\Piranha.Core.csproj", "{DBCA3644-0941-415F-B025-0B9F932E5163}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Piranha.Core.Old", "Piranha.Core.Old\Piranha.Core.Old.csproj", "{A969A8AC-B1EF-4080-804A-3AC4423FBFE3}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Piranha.Data", "Piranha.Data\Piranha.Data.csproj", "{17660AA4-394E-42D7-8151-ECDA93805118}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -53,14 +49,6 @@ Global
 		{DBCA3644-0941-415F-B025-0B9F932E5163}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DBCA3644-0941-415F-B025-0B9F932E5163}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{DBCA3644-0941-415F-B025-0B9F932E5163}.Release|Any CPU.Build.0 = Release|Any CPU
-		{A969A8AC-B1EF-4080-804A-3AC4423FBFE3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{A969A8AC-B1EF-4080-804A-3AC4423FBFE3}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{A969A8AC-B1EF-4080-804A-3AC4423FBFE3}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{A969A8AC-B1EF-4080-804A-3AC4423FBFE3}.Release|Any CPU.Build.0 = Release|Any CPU
-		{17660AA4-394E-42D7-8151-ECDA93805118}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{17660AA4-394E-42D7-8151-ECDA93805118}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{17660AA4-394E-42D7-8151-ECDA93805118}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{17660AA4-394E-42D7-8151-ECDA93805118}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
