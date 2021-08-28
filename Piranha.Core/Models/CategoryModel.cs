@@ -15,7 +15,7 @@ namespace Piranha.Models
         /// <summary>
         /// Gets/sets the archive meta keywords.
         /// </summary>
-        public string ArchiveKeyword { get; set; }
+        public string ArchiveKeywords { get; set; }
 
         /// <summary>
         /// Gets/sets the archive meta description.
