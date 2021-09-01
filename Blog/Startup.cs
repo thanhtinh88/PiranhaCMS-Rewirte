@@ -58,6 +58,11 @@ namespace Blog
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
+
+            var pageTypeBuilder = new Piranha.Builder.Json.PageTypeBuilder(api)
+                .AddJsonFile("piranha.json");
+            pageTypeBuilder.Buid();
+
             App.Init(api, new Piranha.EF.Module[] { new Piranha.EF.Module() });
 
             app.UseHttpsRedirection();

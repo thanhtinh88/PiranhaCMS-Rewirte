@@ -24,10 +24,9 @@ namespace Piranha.AspNet
         /// Creates a new middleware instance.
         /// </summary>
         /// <param name="next">The next middleware in the pipeline</param>
-        public MiddlewareBase(RequestDelegate next, IApi api)
+        public MiddlewareBase(RequestDelegate next)
         {
             this.next = next;
-            this.api = api;
         }
 
         /// <summary>
@@ -35,7 +34,7 @@ namespace Piranha.AspNet
         /// </summary>
         /// <param name="context">The current http context</param>
         /// <returns>An async task</returns>
-        public abstract Task Invoke(HttpContext context);
+        public abstract Task Invoke(HttpContext context, IApi api);
 
         /// <summary>
         /// Checks if the request has already been handled by another Piranha middleware.

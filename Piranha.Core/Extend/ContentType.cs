@@ -2,16 +2,13 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Piranha.Models
+namespace Piranha.Extend
 {
-    /// <summary>
-    /// Defines a content field for a page type.
-    /// </summary>
-    public sealed class PageTypeField
+    public class ContentType
     {
         #region Properties
         /// <summary>
-        /// Gets/sets the id.
+        /// Gets/sets the unique id.
         /// </summary>
         public string Id { get; set; }
 
@@ -21,11 +18,14 @@ namespace Piranha.Models
         public string Title { get; set; }
 
         /// <summary>
-        /// Gets/sets the value type.
+        /// Gets/sets the available regions.
         /// </summary>
-        public string Type { get; set; }
+        public IList<RegionType> Regions { get; set; }
         #endregion
 
-        internal PageTypeField() { }
+        protected ContentType()
+        {
+            Regions = new List<RegionType>();
+        }
     }
 }

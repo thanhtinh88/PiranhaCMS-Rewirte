@@ -116,9 +116,9 @@ namespace Piranha.EF.Repositories
             return result;
         }
 
-        public void Save<TModelType>(TModelType model) where TModelType : Models.PageModel<TModelType>
+        public void Save<T>(T model) where T : Models.PageModel<T>
         {
-            var type = api.PageTypes.GetById(model.PageTypeId);
+            var type = api.PageTypes.GetById(model.TypeId);
             if (type !=null)
             {
                 var currentRegions = type.Regions.Select(r => r.Id).ToArray();
@@ -134,14 +134,14 @@ namespace Piranha.EF.Repositories
                     page = new Data.Page()
                     {
                         Id = model.Id == Guid.Empty ? model.Id : Guid.NewGuid(),
-                        PageTypeId = model.PageTypeId
+                        TypeId = model.TypeId
                     };
                     db.Pages.Add(page);
                     model.Id = page.Id;
                 }
 
                 // Map basic fields
-                Module.Mapper.Map<Models.PageBase, Data.Page>(model, page);
+                Module.Mapper.Map<Models.PageModelBase, Data.Page>(model, page);
 
                 // Map regions
                 foreach (var regionKey in currentRegions)
@@ -197,16 +197,16 @@ namespace Piranha.EF.Repositories
         /// <returns>The page model</returns>
         private T Load<T>(Data.Page page) where T : Models.PageModel<T>
         {
-            var type = api.PageTypes.GetById(page.PageTypeId);
+            var type = api.PageTypes.GetById(page.TypeId);
 
             if (type != null)
             {
                 // create an initialized model
-                var model = (T)typeof(T).GetMethod("Create", BindingFlags.Public | BindingFlags.Static | BindingFlags.FlattenHierarchy).Invoke(null, new object[] { page.PageTypeId });
+                var model = (T)typeof(T).GetMethod("Create", BindingFlags.Public | BindingFlags.Static | BindingFlags.FlattenHierarchy).Invoke(null, new object[] { page.TypeId });
                 var currentRegions = type.Regions.Select(r => r.Id).ToArray();
 
                 // Map basic fields
-                Module.Mapper.Map<Data.Page, Models.PageBase>(page, model);
+                Module.Mapper.Map<Data.Page, Models.PageModelBase>(page, model);
 
                 // Map regions
                 foreach (var regionKey in currentRegions)
@@ -434,8 +434,8 @@ namespace Piranha.EF.Repositories
         {
             if (model is Models.PageModel)
             {
-                var list = (IList)((IDictionary<string, object>)(Models.PageModel)(object)model)[regionId];
-                var obj = Models.PageModel.CreateRegion(model.PageTypeId, regionId);
+                var list = (IList)((IDictionary<string, object>)((Models.PageModel)(object)model).Regions)[regionId];
+                var obj = Models.PageModel.CreateRegion(model.TypeId, regionId);
 
                 foreach (var field in pageFields)
                 {
@@ -478,7 +478,7 @@ namespace Piranha.EF.Repositories
         /// <param name="regionType">The region type</param>
         /// <param name="regionId">The region id</param>
         /// <param name="sortOrder">The optional sort order</param>
-        private void MapRegion<T>(T model, Data.Page page, object region, Models.PageTypeRegion regionType, string regionId, int sortOrder = 0) where T : PageModel<T>
+        private void MapRegion<T>(T model, Data.Page page, object region, Extend.RegionType regionType, string regionId, int sortOrder = 0) where T : PageModel<T>
         {
             // Now map all of ther fields
             for (int n = 0; n < regionType.Fields.Count; n++)

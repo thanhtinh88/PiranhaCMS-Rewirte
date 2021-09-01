@@ -24,13 +24,13 @@ namespace Piranha.EF.Repositories
         /// </summary>
         /// <param name="id">The unique id</param>
         /// <returns>The page type</returns>
-        public Models.PageType GetById(string id)
+        public Extend.PageType GetById(string id)
         {
             var type = db.PageTypes
                 .SingleOrDefault(t => t.Id == id);
 
             if (type != null)
-                return JsonConvert.DeserializeObject<Models.PageType>(type.Body);
+                return JsonConvert.DeserializeObject<Extend.PageType>(type.Body);
 
             return null;
 
@@ -40,14 +40,14 @@ namespace Piranha.EF.Repositories
         /// Gets all available page types.
         /// </summary>
         /// <returns>The page types</returns>
-        public IList<Models.PageType> Get()
+        public IList<Extend.PageType> Get()
         {
-            var result = new List<Models.PageType>();
+            var result = new List<Extend.PageType>();
             var types = db.PageTypes.ToList();
 
             foreach (var type in types)
             {
-                result.Add(JsonConvert.DeserializeObject<Models.PageType>(type.Body));
+                result.Add(JsonConvert.DeserializeObject<Extend.PageType>(type.Body));
             }
 
             return result.OrderBy(t => t.Title).ToList();
@@ -57,7 +57,7 @@ namespace Piranha.EF.Repositories
         /// Saves the given page type.
         /// </summary>
         /// <param name="pageType">The page type</param>
-        public void Save(PageType pageType)
+        public void Save(Extend.PageType pageType)
         {
             var type = db.PageTypes
                 .SingleOrDefault(t => t.Id == pageType.Id);
@@ -78,7 +78,7 @@ namespace Piranha.EF.Repositories
         /// Deletes the given page type.
         /// </summary>
         /// <param name="pageType">The page type</param>
-        public void Delete(PageType pageType)
+        public void Delete(Extend.PageType pageType)
         {
             Delete(pageType.Id);
         }

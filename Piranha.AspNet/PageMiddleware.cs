@@ -12,7 +12,7 @@ namespace Piranha.AspNet
         /// Creates a new middleware instance.
         /// </summary>
         /// <param name="next">The next middleware in the pipeline</param>
-        public PageMiddleware(RequestDelegate next, IApi api): base(next, api)
+        public PageMiddleware(RequestDelegate next, IApi api): base(next)
         {
 
         }
@@ -22,7 +22,7 @@ namespace Piranha.AspNet
         /// </summary>
         /// <param name="context">The current http context</param>
         /// <returns>An async task</returns>
-        public override async Task Invoke(HttpContext context)
+        public override async Task Invoke(HttpContext context, IApi api)
         {
             if (!IsHandled(context))
             {

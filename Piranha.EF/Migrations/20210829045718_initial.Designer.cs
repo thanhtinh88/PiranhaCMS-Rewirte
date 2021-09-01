@@ -10,8 +10,8 @@ using Piranha.EF;
 namespace Piranha.EF.Migrations
 {
     [DbContext(typeof(Db))]
-    [Migration("20210828043719_Initial")]
-    partial class Initial
+    [Migration("20210829045718_initial")]
+    partial class initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {

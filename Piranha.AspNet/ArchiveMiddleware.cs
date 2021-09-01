@@ -8,12 +8,12 @@ namespace Piranha.AspNet
 {
     public class ArchiveMiddleware: MiddlewareBase
     {
-        public ArchiveMiddleware(RequestDelegate next, IApi api): base(next, api)
+        public ArchiveMiddleware(RequestDelegate next): base(next)
         {
 
         }
 
-        public override async Task Invoke(HttpContext context)
+        public override async Task Invoke(HttpContext context, IApi api)
         {
             if (!IsHandled(context))
             {

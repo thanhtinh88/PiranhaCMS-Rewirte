@@ -6,6 +6,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Piranha.AspNet\Piranha.AspNet.csproj" />
+    <ProjectReference Include="..\Piranha.Builder.Json\Piranha.Builder.Json.csproj" />
     <ProjectReference Include="..\Piranha.Core\Piranha.Core.csproj" />
     <ProjectReference Include="..\Piranha.EF\Piranha.EF.csproj" />
   </ItemGroup>

@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Piranha.EF.Data
 {
-    public class Post: IModel, ISlug, ICreated,IModified
+    public sealed class Block: IModel, ICreated, IModified
     {
         #region Properties
         /// <summary>
@@ -13,9 +13,9 @@ namespace Piranha.EF.Data
         public Guid Id { get; set; }
 
         /// <summary>
-        /// Gets/sets the category id.
+        /// Gets/sets the block type id.
         /// </summary>
-        public Guid CategoryId { get; set; }
+        public string TypeId { get; set; }
 
         /// <summary>
         /// Gets/sets the main title.
@@ -23,34 +23,10 @@ namespace Piranha.EF.Data
         public string Title { get; set; }
 
         /// <summary>
-        /// Gets/sets the unique slug.
+        /// Gets/sets the optional view that should be used
+        /// to render this block.
         /// </summary>
-        public string Slug { get; set; }
-
-        /// <summary>
-        /// Gets/sets the optional meta keywords.
-        /// </summary>
-        public string MetaKeywords { get; set; }
-
-        /// <summary>
-        /// Gets/sets the optional meta description.
-        /// </summary>
-        public string MetaDescription { get; set; }
-
-        /// <summary>
-        /// Gets/sets the optional excerpt.
-        /// </summary>
-        public string Excerpt { get; set; }
-
-        /// <summary>
-        /// Gets/sets the main post body.
-        /// </summary>
-        public string Body { get; set; }
-
-        /// <summary>
-        /// Gets/sets the internal route used by the middleware.
-        /// </summary>
-        public string Route { get; set; }
+        public string View { get; set; }
 
         /// <summary>
         /// Gets/sets the optional published date.
@@ -66,14 +42,22 @@ namespace Piranha.EF.Data
         /// Gets/sets the last modification date.
         /// </summary>
         public DateTime LastModified { get; set; }
-
         #endregion
-
         #region Navigation properties
         /// <summary>
-        /// Gets/sets the post category.
+        /// Gets/sets the block type.
         /// </summary>
-        public Category Category { get; set; }
+        public BlockType Type { get; set; }
+
+        /// <summary>
+        /// Gets/sets the available fields.
+        /// </summary>
+        public IList<BlockField> Fields { get; set; }
         #endregion
+
+        public Block()
+        {
+            Fields = new List<BlockField>();
+        }
     }
 }

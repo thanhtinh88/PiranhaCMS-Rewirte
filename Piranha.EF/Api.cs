@@ -22,6 +22,11 @@ namespace Piranha.EF
         public IArchiveRepostiory Archives { get; }
 
         /// <summary>
+        /// Gets the block type repository.
+        /// </summary>
+        public IBlockTypeRepository BlockTypes { get; set; }
+
+        /// <summary>
         /// Gets the category repository.
         /// </summary>
         public ICategoryRepository Categories { get; }
@@ -47,6 +52,7 @@ namespace Piranha.EF
             this.db = db;
 
             Archives = new Repositories.ArchiveRepostiory(db);
+            BlockTypes = new Repositories.BlockTypeRepository(db);
             Categories = new Repositories.CategoryRepository(db);
             Pages = new Repositories.PageRepository(this, db);
             PageTypes = new Repositories.PageTypeRepository(db);
