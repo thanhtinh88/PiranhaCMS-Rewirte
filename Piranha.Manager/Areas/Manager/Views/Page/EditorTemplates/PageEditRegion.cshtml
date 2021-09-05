@@ -2,7 +2,7 @@
 
 @for (var n = 0; n < Model.FieldSet.Count; n++)
 {
-    <div class="form-group">
+    <div class="form-group @(Model.FieldSet.Count == 1 ? "single-region" : "")">
         @Html.HiddenFor(m => m.FieldSet[n].Id)
         @Html.HiddenFor(m => m.FieldSet[n].CLRType)
         @if (Model.FieldSet.Count > 1)

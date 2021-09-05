@@ -9,6 +9,7 @@ using Microsoft.Extensions.Logging;
 using Piranha;
 using Piranha.AspNet;
 using Piranha.EF;
+using Piranha.Manager;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -41,7 +42,8 @@ namespace Blog
         {
             services.AddControllersWithViews();
 			services.AddDbContext<Piranha.EF.Db>(options => options.UseSqlServer(Configuration["Data:Piranha:ConnectionString"])); 			
-			services.AddScoped<IApi, Piranha.EF.Api>();			
+			services.AddScoped<IApi, Piranha.EF.Api>();
+            services.AddPiranhaManager();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -66,7 +68,7 @@ namespace Blog
                 .AddJsonFile("piranha.json");
             blockTypeBuilder.Build();
 
-            App.Init(api, new Piranha.EF.Module[] { new Piranha.EF.Module() });
+            App.Init(api, new Piranha.EF.Module(), new Piranha.Manager.Module());
 
             app.UseHttpsRedirection();
             app.UseStaticFiles();

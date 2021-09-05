@@ -2,10 +2,20 @@
 
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
-    <RootNamespace>Piranha</RootNamespace>
+    <RootNamespace>Piranha.Manager</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>
+    <EmbeddedResource Include="Areas/Manager/Views/**/*.cshtml" />
+    <EmbeddedResource Include="assets/css/*.min.css" />
+    <EmbeddedResource Include="assets/img/*.ico" />
+    <EmbeddedResource Include="assets/img/*.png" />
+    <EmbeddedResource Include="assets/js/*.min.js" />
+    <EmbeddedResource Include="assets/vendor/bootstrap/fonts/*" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation" Version="3.1.18" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="5.0.9">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
@@ -17,21 +27,6 @@
   <ItemGroup>
     <ProjectReference Include="..\Piranha.Core\Piranha.Core.csproj" />
     <ProjectReference Include="..\Piranha.EF\Piranha.EF.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="wwwroot\assets\manager\img\" />
-    <Folder Include="wwwroot\assets\manager\vendor\" />
-    <Folder Include="wwwroot\css\" />
-    <Folder Include="wwwroot\images\" />
-    <Folder Include="wwwroot\js\" />
-    <Folder Include="wwwroot\lib\bootstrap\" />
-    <Folder Include="wwwroot\lib\bootstrap\dist\js\" />
-    <Folder Include="wwwroot\lib\jquery-validation-unobtrusive\" />
-    <Folder Include="wwwroot\lib\jquery-validation\" />
-    <Folder Include="wwwroot\lib\jquery-validation\dist\" />
-    <Folder Include="wwwroot\lib\jquery\" />
-    <Folder Include="wwwroot\lib\jquery\dist\" />
   </ItemGroup>
 
 </Project>

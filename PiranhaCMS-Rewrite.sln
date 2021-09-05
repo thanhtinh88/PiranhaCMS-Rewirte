@@ -25,7 +25,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Piranha.Core", "Piranha.Cor
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Piranha.Builder.Json", "Piranha.Builder.Json\Piranha.Builder.Json.csproj", "{EB1B666B-AF88-430D-ACF0-8B9DE0161321}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Piranha.Manager", "Piranha.Manager\Piranha.Manager.csproj", "{939239E9-9AF4-4D95-8BF0-F63588292C52}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Piranha.Manager", "Piranha.Manager\Piranha.Manager.csproj", "{939239E9-9AF4-4D95-8BF0-F63588292C52}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
