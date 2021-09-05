@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Piranha.EF;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -25,8 +26,8 @@ namespace Piranha.Manager
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllersWithViews();
-            services.AddDbContext<EF.Db>(options => options.UseSqlServer(Configuration["Data:Piranha:ConnectionString"]));
-            services.AddScoped<IApi, EF.Api>();
+            services.AddPiranhaEF(options => options.UseSqlServer(Configuration["Data:Piranha:ConnectionString"]));
+            services.AddPiranhaManager();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -43,9 +44,10 @@ namespace Piranha.Manager
                 app.UseHsts();
             }
 
-            App.Init(api, new Manager.Module(), new EF.Module());
+            App.Init(api);
             app.UseHttpsRedirection();
             app.UseStaticFiles();
+            app.UsePiranhaManager();
 
             app.UseRouting();
 

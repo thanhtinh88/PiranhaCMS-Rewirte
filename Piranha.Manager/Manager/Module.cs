@@ -1,14 +1,31 @@
 ﻿using AutoMapper;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Threading.Tasks;
 
 namespace Piranha.Manager
 {
     public class Module:Extend.IModule
     {
+        #region Properties
+        /// <summary>
+        /// Gets the mapper.
+        /// </summary>
         public static IMapper Mapper { get; private set; }
+
+        /// <summary>
+        /// The assembly.
+        /// </summary>
+        internal static Assembly Assembly;
+
+        /// <summary>
+        /// Last modification date of the assembly.
+        /// </summary>
+        internal static DateTime LastModified;
+        #endregion
 
         public void Init()
         {
@@ -25,6 +42,9 @@ namespace Piranha.Manager
 
             config.AssertConfigurationIsValid();
             Mapper = config.CreateMapper();
+
+            Assembly = this.GetType().GetTypeInfo().Assembly;
+            LastModified = new FileInfo(Assembly.Location).LastWriteTime;
         }
     }
 }

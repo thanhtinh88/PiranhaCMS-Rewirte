@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc.Razor;
+﻿using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Mvc.Razor;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.FileProviders;
 using System;
@@ -28,6 +29,12 @@ namespace Piranha.Manager
             // Add the manager module
             Piranha.App.Modules.Add(new Piranha.Manager.Module());
             return services;
+        }
+
+        public static IApplicationBuilder UsePiranhaManager(this IApplicationBuilder builder)
+        {
+            return builder
+                .UseMiddleware<Piranha.Manager.ResourceMiddleware>();
         }
     }
 }
