@@ -1,0 +1,21 @@
+{
+  "version": "1.0",
+  "defaultProvider": "cdnjs",
+  "libraries": [
+    {
+      "library": "bootstrap@5.1.0",
+      "destination": "wwwroot/assets/manager/vendor/bootstrap/"
+    },
+    {
+      "library": "jasny-bootstrap@4.0.0",
+      "destination": "wwwroot/assets/manager/vendor/jasny-bootstrap/"
+    },
+    {
+      "library": "jquery@3.6.0",
+      "destination": "wwwroot/assets/manager/vendor/jquery/",
+      "files": [
+        "jquery.js"
+      ]
+    }
+  ]
+}

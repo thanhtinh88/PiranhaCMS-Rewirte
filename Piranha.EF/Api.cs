@@ -19,32 +19,34 @@ namespace Piranha.EF
         /// <summary>
         /// Gets the archive repository.
         /// </summary>
-        public IArchiveRepostiory Archives { get; }
+        public IArchiveRepostiory Archives { get; private set; }
 
         /// <summary>
         /// Gets the block type repository.
         /// </summary>
-        public IBlockTypeRepository BlockTypes { get; set; }
+        public IBlockTypeRepository BlockTypes { get; private set; }
 
         /// <summary>
         /// Gets the category repository.
         /// </summary>
-        public ICategoryRepository Categories { get; }
+        public ICategoryRepository Categories { get; private set; }
 
         /// <summary>
         /// Gets the page repository.
         /// </summary>
-        public IPageRepository Pages { get; }
+        public IPageRepository Pages { get; private set; }
 
         /// <summary>
         /// Gets the page type repository.
         /// </summary>
-        public IPageTypeRepository PageTypes { get; }
+        public IPageTypeRepository PageTypes { get; private set; }
 
         /// <summary>
         /// Gets the post repository.
         /// </summary>
-        public IPostRepository Posts { get;  }
+        public IPostRepository Posts { get; private set; }
+
+        public ISitemapRepository Sitemap { get; private set; }
         #endregion
 
         public Api(Db db)
@@ -56,7 +58,8 @@ namespace Piranha.EF
             Categories = new Repositories.CategoryRepository(db);
             Pages = new Repositories.PageRepository(this, db);
             PageTypes = new Repositories.PageTypeRepository(db);
-            Posts = new Repositories.PostRepository(db);            
+            Posts = new Repositories.PostRepository(db);
+            Sitemap = new Repositories.SitemapRepository(db);
         }
 
         public void Dispose()

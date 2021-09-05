@@ -62,6 +62,9 @@ namespace Blog
             var pageTypeBuilder = new Piranha.Builder.Json.PageTypeBuilder(api)
                 .AddJsonFile("piranha.json");
             pageTypeBuilder.Buid();
+            var blockTypeBuilder = new Piranha.Builder.Json.BlockTypeBuilder(api)
+                .AddJsonFile("piranha.json");
+            blockTypeBuilder.Build();
 
             App.Init(api, new Piranha.EF.Module[] { new Piranha.EF.Module() });
 
@@ -79,6 +82,10 @@ namespace Blog
 
             app.UseEndpoints(endpoints =>
             {
+                endpoints.MapControllerRoute(
+                    name: "areaRoute",
+                    pattern: "{area:exists}/{controller=manager}/{action=Index}/{id?}");
+
                 endpoints.MapControllerRoute(
                     name: "default",
                     pattern: "{controller=Home}/{action=Index}/{id?}");

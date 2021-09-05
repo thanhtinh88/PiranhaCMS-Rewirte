@@ -90,7 +90,7 @@ namespace Piranha
         /// Initializes the application.
         /// </summary>
         /// <param name="configurate">Action for configurating the application</param>
-        public static void Init(IApi api, Extend.IModule[] modules = null)
+        public static void Init(IApi api, params Extend.IModule[] modules)
         {            
             instance.Initialize(api, modules);
         }

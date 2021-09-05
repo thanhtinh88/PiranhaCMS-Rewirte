@@ -25,6 +25,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Piranha.Core", "Piranha.Cor
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Piranha.Builder.Json", "Piranha.Builder.Json\Piranha.Builder.Json.csproj", "{EB1B666B-AF88-430D-ACF0-8B9DE0161321}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Piranha.Manager", "Piranha.Manager\Piranha.Manager.csproj", "{939239E9-9AF4-4D95-8BF0-F63588292C52}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -55,6 +57,10 @@ Global
 		{EB1B666B-AF88-430D-ACF0-8B9DE0161321}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{EB1B666B-AF88-430D-ACF0-8B9DE0161321}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{EB1B666B-AF88-430D-ACF0-8B9DE0161321}.Release|Any CPU.Build.0 = Release|Any CPU
+		{939239E9-9AF4-4D95-8BF0-F63588292C52}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{939239E9-9AF4-4D95-8BF0-F63588292C52}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{939239E9-9AF4-4D95-8BF0-F63588292C52}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{939239E9-9AF4-4D95-8BF0-F63588292C52}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -70,6 +76,7 @@ Global
 		{8B6C5B6E-09AD-4940-A402-96F057F7EE9C} = {805550A7-62C3-4888-A47C-05DCC370C2CB}
 		{DBCA3644-0941-415F-B025-0B9F932E5163} = {805550A7-62C3-4888-A47C-05DCC370C2CB}
 		{EB1B666B-AF88-430D-ACF0-8B9DE0161321} = {805550A7-62C3-4888-A47C-05DCC370C2CB}
+		{939239E9-9AF4-4D95-8BF0-F63588292C52} = {805550A7-62C3-4888-A47C-05DCC370C2CB}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {FDD518B4-2131-4805-8CE7-0607A8561B2B}

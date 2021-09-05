@@ -39,5 +39,7 @@ namespace Piranha
 		/// </summary>
         IPostRepository Posts { get; }
 
+        ISitemapRepository Sitemap { get; }
+
     }
 }

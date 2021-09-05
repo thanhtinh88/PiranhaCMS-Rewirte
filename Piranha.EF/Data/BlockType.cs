@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Piranha.EF.Data
 {
-    public class BlockType: ICreated, IModified
+    public sealed class BlockType: ICreated, IModified
     {
         #region Properties
         /// <summary>

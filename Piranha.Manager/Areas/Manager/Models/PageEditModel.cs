@@ -1,0 +1,228 @@
+﻿using Piranha.Manager;
+using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+
+namespace Piranha.Areas.Manager.Models
+{
+    public class PageEditModel: Piranha.Models.PageModelBase
+    {
+        #region properties
+        public Extend.PageType PageType { get; set; }
+        public IList<PageEditRegionBase> Regions { get; set; }
+        #endregion
+
+        public PageEditModel()
+        {
+            Regions = new List<PageEditRegionBase>();
+        }
+
+        public bool Save(IApi api)
+        {
+            var page = api.Pages.GetById(Id);
+            
+            if (page != null)
+            {
+                Module.Mapper.Map<PageEditModel, Piranha.Models.PageModelBase>(this, page);
+                SaveRegions(this, page);
+                api.Pages.Save(page);
+                return true;
+            }
+            return false;
+        }
+
+        public static PageEditModel GetById(IApi api, Guid id)
+        {
+            var page = api.Pages.GetById(id);
+            if (page != null)
+            {
+                var model = new PageEditModel();
+                Module.Mapper.Map<Piranha.Models.PageModelBase, PageEditModel>(page, model);
+                model.PageType = App.PageTypes.SingleOrDefault(t => t.Id == model.TypeId);
+                LoadRegions(page, model);
+
+                return model;
+            }
+            throw new KeyNotFoundException($"No page found with the id '{id}'");
+        }
+
+        private static void LoadRegions(Piranha.Models.PageModel src, PageEditModel dest)
+        {
+            if (dest.PageType != null)
+            {
+                foreach (var region in dest.PageType.Regions)
+                {
+                    var regions = (IDictionary<string, object>)src.Regions;
+
+                    if (regions.ContainsKey(region.Id))
+                    {
+                        PageEditRegionBase editRegion;
+
+                        if (region.Collection)
+                        {
+                            editRegion = new PageEditRegionCollection();
+                        }
+                        else
+                        {
+                            editRegion = new PageEditRegion();
+                        }
+
+                        editRegion.Id = region.Id;
+                        editRegion.Title ??= region.Id;
+                        editRegion.CLRType = editRegion.GetType().FullName;
+
+                        IList items = new List<object>();
+
+                        if (region.Collection)
+                            items = (IList)regions[region.Id];
+                        else
+                            items.Add(regions[region.Id]);
+
+                        foreach (var item in items)
+                        {
+                            if (region.Fields.Count == 1)
+                            {
+                                editRegion.Add(new PageEditFieldSet()
+                                {
+                                    new PageEditField()
+                                    {
+                                        Id = region.Fields[0].Id,
+                                        Title = region.Fields[0].Title ?? region.Fields[0].Id,
+                                        CLRType = item.GetType().FullName,
+                                        Value = (Extend.IField)item
+                                    }
+                                });
+                            }
+                            else
+                            {
+                                var fieldData = (IDictionary<string, object>)item;
+                                var fieldSet = new PageEditFieldSet();
+
+                                foreach (var field in region.Fields)
+                                {
+                                    if (fieldData.ContainsKey(field.Id))
+                                    {
+                                        fieldSet.Add(new PageEditField()
+                                        {
+                                            Id = field.Id,
+                                            Title = field.Title ?? field.Id,
+                                            CLRType = fieldData[field.Id].GetType().FullName,
+                                            Value = (Extend.IField)fieldData[field.Id]
+                                        });
+                                    }
+                                }
+                                editRegion.Add(fieldSet);
+                            }
+                            dest.Regions.Add(editRegion);
+                        }
+                    }
+                }
+            }
+        }
+
+        private static void SaveRegions(PageEditModel src, Piranha.Models.PageModel dest)
+        {
+            var modelRegions = (IDictionary<string, object>)dest.Regions;
+            foreach (var region in src.Regions)
+            {
+                if (region is PageEditRegion)
+                {
+                    if (!modelRegions.ContainsKey(region.Id))
+                        modelRegions[region.Id] = Piranha.Models.PageModel.CreateRegion(dest.TypeId, region.Id);
+
+                    var reg = (PageEditRegion)region;
+
+                    if (reg.FieldSet.Count == 1)
+                    {
+                        modelRegions[region.Id] = reg.FieldSet[0].Value;
+                    }
+                    else
+                    {
+                        var modelFields = (IDictionary<string, object>)modelRegions[region.Id];
+
+                        foreach (var field in reg.FieldSet)
+                        {
+                            modelFields[field.Id] = field.Value;
+                        }
+                    }
+                }
+                else
+                {
+                    if (modelRegions.ContainsKey(region.Id))
+                    {
+                        var list = (Piranha.Models.IRegionList)modelRegions[region.Id];
+                        var reg = (PageEditRegionCollection)region;
+
+                        // At this point we clear the values and rebuild them
+                        list.Clear();
+
+                        foreach (var set in reg.FieldSets)
+                        {
+                            if (set.Count == 1)
+                            {
+                                list.Add(set[0].Value);
+                            }
+                            else
+                            {
+                                var modelFields = (IDictionary<string, object>)Piranha.Models.PageModel.CreateRegion(dest.TypeId, region.Id);
+                                foreach (var field in set)
+                                {
+                                    modelFields[field.Id] = field.Value;
+                                }
+                                list.Add(modelFields);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    #region Helper classes
+    public abstract class PageEditRegionBase
+    {
+        public string Id { get; set; }
+        public string Title { get; set; }
+        public string CLRType { get; set; }
+
+        public abstract void Add(PageEditFieldSet fieldSet);
+    }
+
+    public class PageEditRegion: PageEditRegionBase
+    {
+        public PageEditFieldSet FieldSet { get; set; }
+
+        public override void Add(PageEditFieldSet fieldSet)
+        {
+            FieldSet = fieldSet;
+        }
+    }
+
+    public class PageEditRegionCollection: PageEditRegionBase
+    {
+        public IList<PageEditFieldSet> FieldSets { get; set; }
+
+        public PageEditRegionCollection()
+        {
+            FieldSets = new List<PageEditFieldSet>();
+        }
+
+        public override void Add(PageEditFieldSet fieldSet)
+        {
+            FieldSets.Add(fieldSet);
+        }
+    }
+
+    public class PageEditFieldSet: List<PageEditField> { }
+
+    public class PageEditField
+    {
+        public string Id { get; set; }
+        public string Title { get; set; }
+        public string CLRType { get; set; }
+        public Extend.IField Value { get; set; }
+    }
+    #endregion
+}

@@ -39,5 +39,13 @@ namespace Piranha.Models
             Add(item);
             return item;
         }
+
+        public void Add(object item)
+        {
+            if (item.GetType() == typeof(T))
+                base.Add((T)item);
+            else
+                throw new ArgumentException();
+        }
     }
 }
