@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
@@ -24,12 +25,16 @@ namespace Piranha.Areas.Manager.Controllers
         public IActionResult GetAsset(string path)
         {
             var assembly = typeof(AssetController).GetTypeInfo().Assembly;
-            string[] result = assembly.GetManifestResourceNames();
             var filePath = "Piranha.Manager.assets." + path.Replace("/", ".");
             var stream = assembly.GetManifestResourceStream(filePath);
 
             if (stream != null)
-                return new FileStreamResult(stream, GetContentType(path));
+            {
+                using (var reader = new BinaryReader(stream))
+                {
+                    return new FileContentResult(reader.ReadBytes((int)reader.BaseStream.Length), GetContentType(path));
+                }
+            }
             return NotFound();
         }
 

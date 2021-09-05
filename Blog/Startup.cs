@@ -41,8 +41,7 @@ namespace Blog
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllersWithViews();
-			services.AddDbContext<Piranha.EF.Db>(options => options.UseSqlServer(Configuration["Data:Piranha:ConnectionString"])); 			
-			services.AddScoped<IApi, Piranha.EF.Api>();
+			services.AddPiranhaEF(options => options.UseSqlServer(Configuration["Data:Piranha:ConnectionString"])); 						
             services.AddPiranhaManager();
         }
 
@@ -68,7 +67,7 @@ namespace Blog
                 .AddJsonFile("piranha.json");
             blockTypeBuilder.Build();
 
-            App.Init(api, new Piranha.EF.Module(), new Piranha.Manager.Module());
+            App.Init(api);
 
             app.UseHttpsRedirection();
             app.UseStaticFiles();
