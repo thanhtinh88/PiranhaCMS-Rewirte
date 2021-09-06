@@ -12,7 +12,7 @@ namespace Piranha.AspNet
         /// Creates a new middleware instance.
         /// </summary>
         /// <param name="next">The next middleware in the pipeline</param>
-        public PageMiddleware(RequestDelegate next, IApi api): base(next)
+        public PageMiddleware(RequestDelegate next): base(next)
         {
 
         }

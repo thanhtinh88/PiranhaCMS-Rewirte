@@ -44,8 +44,8 @@ namespace Blog
             {
                 options.ModelBinderProviders.Insert(0, new Piranha.Areas.Manager.Binders.AbstractModelBinderProvider());
             });
-            services.AddPiranhaEF(options => options.UseSqlServer(Configuration["Data:Piranha:ConnectionString"]));
-            //services.AddPiranhaEF(options => options.UseSqlite("Filename=./blog.db"));
+            //services.AddPiranhaEF(options => options.UseSqlServer(Configuration["Data:Piranha:ConnectionString"]));
+            services.AddPiranhaEF(options => options.UseSqlite("Filename=./blog.db"));
             services.AddPiranhaManager();
         }
 
@@ -76,9 +76,7 @@ namespace Blog
             app.UseHttpsRedirection();
             app.UseStaticFiles();
 
-			app.UsePiranhaPosts();
-			app.UsePiranhaArchives();
-            app.UsePiranhaStartPage();
+            app.UsePiranha();
             app.UsePiranhaManager();
 
             app.UseRouting();

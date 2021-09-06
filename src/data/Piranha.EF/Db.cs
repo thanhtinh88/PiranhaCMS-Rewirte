@@ -64,7 +64,7 @@ namespace Piranha.EF
 		public Db(DbContextOptions<Db> options): base(options)
         {
 			// Ensure that the database is created & in sync
-			Database.Migrate();
+			Database.EnsureCreated();
         }
 
 		/// <summary>
