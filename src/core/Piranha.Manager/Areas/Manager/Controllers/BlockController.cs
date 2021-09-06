@@ -7,33 +7,27 @@ using System.Threading.Tasks;
 namespace Piranha.Areas.Manager.Controllers
 {
     [Area("Manager")]
-    public class PostController : Controller
+    public class BlockController : Controller
     {
         #region Members
         /// <summary>
         /// The current api.
         /// </summary>
-        private IApi api; 
+        private IApi api;
         #endregion
 
-        public PostController(IApi api)
+        public BlockController(IApi api)
         {
             this.api = api;
         }
 
-        [Route("manager/posts")]
+        /// <summary>
+        /// Gets the list view for the blocks.
+        /// </summary>
+        [Route("manager/blocks")]
         public IActionResult List()
         {
             return View();
-        }
-
-        /// <summary>
-        /// Disposes the controller and its resources.
-        /// </summary>
-        protected override void Dispose(bool disposing)
-        {
-            api.Dispose();
-            base.Dispose(disposing);
         }
     }
 }

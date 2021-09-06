@@ -1,4 +1,5 @@
-﻿using Piranha.Repositories;
+﻿using Microsoft.EntityFrameworkCore;
+using Piranha.Repositories;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -51,7 +52,9 @@ namespace Piranha.EF
 
         public Api(Db db)
         {
-            this.db = db;
+            var builder = new DbContextOptionsBuilder<Db>();
+            Module.DbConfig(builder);
+            this.db = new Db(builder.Options);
 
             Archives = new Repositories.ArchiveRepostiory(db);
             BlockTypes = new Repositories.BlockTypeRepository(db);

@@ -66,15 +66,5 @@ namespace Blog.Controllers
         {
             return View(api.Posts.GetById(id));
         }
-
-        /// <summary>
-		/// Disposes the controller.
-		/// </summary>
-        protected override void Dispose(bool disposing)
-        {
-            if (disposing && api != null)
-                api.Dispose();
-            base.Dispose(disposing);
-        }
     }
 }

@@ -20,7 +20,7 @@ namespace Piranha.EF.Repositories
 		/// <returns>The category</returns>
         public Models.Category GetBySlug(string slug)
         {
-            var result = Query().SingleOrDefault(c => c.Slug == slug);
+            var result = Query().FirstOrDefault(c => c.Slug == slug);
                         
             if (result != null)
                 return Map(result);
@@ -34,7 +34,7 @@ namespace Piranha.EF.Repositories
 		/// <returns>The category</returns>
         public Models.CategoryModel GetModelById(Guid id)
         {
-            var result = Query().SingleOrDefault(c => c.Id == id);
+            var result = Query().FirstOrDefault(c => c.Id == id);
 
             if (result != null)
                 return MapModel(result);
@@ -48,7 +48,7 @@ namespace Piranha.EF.Repositories
 		/// <returns>The category</returns>
         public Models.CategoryModel GetModelBySlug(string slug)
         {
-            var result = Query().SingleOrDefault(c => c.Slug == slug);
+            var result = Query().FirstOrDefault(c => c.Slug == slug);
 
             if (result != null)
                 return MapModel(result);
@@ -61,7 +61,7 @@ namespace Piranha.EF.Repositories
 		/// <param name="model">The category</param>
         public void Save(Models.Category model)
         {
-            var category = db.Categories.SingleOrDefault(c => c.Id == model.Id);
+            var category = db.Categories.FirstOrDefault(c => c.Id == model.Id);
             if (category == null)
             {
                 category = new Data.Category()
@@ -82,7 +82,7 @@ namespace Piranha.EF.Repositories
 		/// <param name="model">The full model</param>
         public void Save(Models.CategoryModel model)
         {
-            var category = db.Categories.SingleOrDefault(c => c.Id == model.Id);
+            var category = db.Categories.FirstOrDefault(c => c.Id == model.Id);
             if (category == null)
             {
                 category = new Data.Category()

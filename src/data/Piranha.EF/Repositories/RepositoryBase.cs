@@ -31,7 +31,7 @@ namespace Piranha.EF.Repositories
 		/// <returns>The model</returns>
         public virtual TModel GetById(Guid id)
         {
-            var result = Query().SingleOrDefault(e => e.Id == id);
+            var result = Query().FirstOrDefault(e => e.Id == id);
             if (result != null)
             {
                 return Map(result);

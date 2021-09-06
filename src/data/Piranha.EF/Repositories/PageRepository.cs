@@ -46,7 +46,7 @@ namespace Piranha.EF.Repositories
         /// <returns>The page model</returns>
         public T GetStartPage<T>() where T : Models.PageModel<T>
         {
-            var page = Query().SingleOrDefault(p => !p.ParentId.HasValue && p.SortOrder == 0);
+            var page = Query().FirstOrDefault(p => !p.ParentId.HasValue && p.SortOrder == 0);
 
             if (page != null)
                 return Load<T>(page);
@@ -70,7 +70,7 @@ namespace Piranha.EF.Repositories
         /// <param name="id">The unique id</param>
         public T GetById<T>(Guid id) where T : Models.PageModel<T>
         {
-            var page = Query().SingleOrDefault(p => p.Id == id);
+            var page = Query().FirstOrDefault(p => p.Id == id);
 
             if (page != null)
                 return Load<T>(page);
@@ -95,7 +95,7 @@ namespace Piranha.EF.Repositories
         /// <returns>The page model</returns>
         public T GetBySlug<T>(string slug) where T : Models.PageModel<T>
         {
-            var page = Query().SingleOrDefault(p => p.Slug == slug);
+            var page = Query().FirstOrDefault(p => p.Slug == slug);
             if (page != null)
                 return Load<T>(page);
             return null;
@@ -126,7 +126,7 @@ namespace Piranha.EF.Repositories
                 // Check if we have the page in the database already
                 var page = db.Pages
                     .Include(p => p.Fields)
-                    .SingleOrDefault(p => p.Id == model.Id);
+                    .FirstOrDefault(p => p.Id == model.Id);
 
                 // if not, create new page
                 if (page == null)
@@ -218,7 +218,7 @@ namespace Piranha.EF.Repositories
                     {
                         foreach (var fieldDef in region.Fields)
                         {
-                            var field = fields.SingleOrDefault(f => f.FieldId == fieldDef.Id && f.SortOrder == 0);
+                            var field = fields.FirstOrDefault(f => f.FieldId == fieldDef.Id && f.SortOrder == 0);
 
                             if (field != null)
                             {
@@ -241,7 +241,7 @@ namespace Piranha.EF.Repositories
                         {
                             if (region.Fields.Count == 1)
                             {
-                                var field = fields.SingleOrDefault(f => f.FieldId == region.Fields[0].Id && f.SortOrder == sortOrder);
+                                var field = fields.FirstOrDefault(f => f.FieldId == region.Fields[0].Id && f.SortOrder == sortOrder);
                                 if (field != null)
                                     AddSimpleValue(model, regionKey, field);
                             }
@@ -509,7 +509,7 @@ namespace Piranha.EF.Repositories
 
                     // Check if we have the current field in the database already
                     var field = page.Fields
-                        .SingleOrDefault(f => f.RegionId == regionId && f.FieldId == fieldDef.Id && f.SortOrder == sortOrder);
+                        .FirstOrDefault(f => f.RegionId == regionId && f.FieldId == fieldDef.Id && f.SortOrder == sortOrder);
 
                     // If not, create a new fields
                     if (field == null)

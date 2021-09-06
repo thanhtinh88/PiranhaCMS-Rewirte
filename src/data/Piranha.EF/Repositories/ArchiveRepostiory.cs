@@ -54,7 +54,7 @@ namespace Piranha.EF.Repositories
         { 
             // Get the requested category
             var category = db.Categories
-                .SingleOrDefault(c => c.Id == id);
+                .FirstOrDefault(c => c.Id == id);
             if (category != null)
             {
                 // Set basic fields
@@ -134,7 +134,7 @@ namespace Piranha.EF.Repositories
         public Models.ArchiveModel GetBySlug(string slug, int? page = 1, int? year = null, int? month = null)
         {
             var category = db.Categories
-                .SingleOrDefault(c => c.Slug == slug);
+                .FirstOrDefault(c => c.Slug == slug);
 
             if (category != null)
                 return GetById<Models.ArchiveModel>(category.Id, page, year, month);
@@ -152,7 +152,7 @@ namespace Piranha.EF.Repositories
         public T GetBySlug<T>(string slug, int? page = 1, int? year = null, int? month = null) where T: Models.ArchiveModel
         {
             var category = db.Categories
-                .SingleOrDefault(c => c.Slug == slug);
+                .FirstOrDefault(c => c.Slug == slug);
             if (category != null)
                 return GetById<T>(category.Id, page, year, month);
             return null;

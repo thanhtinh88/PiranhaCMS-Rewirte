@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -16,6 +17,11 @@ namespace Piranha.EF
         /// Gets the registered serializers.
         /// </summary>
         public static Serializers.SerializerManager Serializer { get; private set; }
+
+        /// <summary>
+        /// Gets the currently configured DbContext configuration.
+        /// </summary>
+        public static Action<DbContextOptionsBuilder> DbConfig { get; internal set; }
 
         /// <summary>
         /// Initializes the module.

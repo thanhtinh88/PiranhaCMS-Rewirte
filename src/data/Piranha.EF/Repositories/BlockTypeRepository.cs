@@ -26,7 +26,7 @@ namespace Piranha.EF.Repositories
         public Extend.BlockType GetById(string id)
         {
             var type = db.BlockTypes
-                .SingleOrDefault(t => t.Id == id);
+                .FirstOrDefault(t => t.Id == id);
 
             if (type != null)
                 return JsonConvert.DeserializeObject<Extend.BlockType>(type.Body);
@@ -56,7 +56,7 @@ namespace Piranha.EF.Repositories
         public void Save(Extend.BlockType blockType)
         {
             var type = db.BlockTypes
-                .SingleOrDefault(t => t.Id == blockType.Id);
+                .FirstOrDefault(t => t.Id == blockType.Id);
 
             if (type == null)
             {
@@ -86,7 +86,7 @@ namespace Piranha.EF.Repositories
         public void Delete(string id)
         {
             var type = db.BlockTypes
-                .SingleOrDefault(t => t.Id == id);
+                .FirstOrDefault(t => t.Id == id);
             if (type != null)
             {
                 db.BlockTypes.Remove(type);

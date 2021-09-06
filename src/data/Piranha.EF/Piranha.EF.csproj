@@ -15,7 +15,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Piranha.Core\Piranha.Core.csproj" />
+    <ProjectReference Include="..\..\core\Piranha.Core\Piranha.Core.csproj" />
   </ItemGroup>
 
 </Project>

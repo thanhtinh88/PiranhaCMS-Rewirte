@@ -115,8 +115,9 @@ namespace Piranha.Areas.Manager.Models
                                 }
                                 editRegion.Add(fieldSet);
                             }
-                            dest.Regions.Add(editRegion);
                         }
+
+                        dest.Regions.Add(editRegion);
                     }
                 }
             }
