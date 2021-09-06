@@ -10,7 +10,14 @@ namespace Piranha.Areas.Manager.Models
     public class PageEditModel: Piranha.Models.PageModelBase
     {
         #region properties
+        /// <summary>
+        /// Gets/sets the page type.
+        /// </summary>
         public Extend.PageType PageType { get; set; }
+
+        /// <summary>
+        /// Gets/sets the available regions.
+        /// </summary>
         public IList<PageEditRegionBase> Regions { get; set; }
         #endregion
 
@@ -19,20 +26,31 @@ namespace Piranha.Areas.Manager.Models
             Regions = new List<PageEditRegionBase>();
         }
 
+        /// <summary>
+        /// Saves the page model.
+        /// </summary>
+        /// <param name="api">The current api</param>
+        /// <returns>If the page was successfully saved</returns>
         public bool Save(IApi api)
         {
             var page = api.Pages.GetById(Id);
-            
-            if (page != null)
-            {
-                Module.Mapper.Map<PageEditModel, Piranha.Models.PageModelBase>(this, page);
-                SaveRegions(this, page);
-                api.Pages.Save(page);
-                return true;
-            }
-            return false;
+
+            if (page == null)
+                page = Piranha.Models.PageModel.Create(this.TypeId);
+
+            Module.Mapper.Map<PageEditModel, Piranha.Models.PageModelBase>(this, page);
+            SaveRegions(this, page);
+            api.Pages.Save(page);
+
+            return true;
         }
 
+        /// <summary>
+        /// Gets the edit model for the page with the given id.
+        /// </summary>
+        /// <param name="api">The current api</param>
+        /// <param name="id">The page id</param>
+        /// <returns>The page model</returns>
         public static PageEditModel GetById(IApi api, Guid id)
         {
             var page = api.Pages.GetById(id);
@@ -48,6 +66,30 @@ namespace Piranha.Areas.Manager.Models
             throw new KeyNotFoundException($"No page found with the id '{id}'");
         }
 
+        /// <summary>
+        /// Creates a new edit model with the given page typeparamref.
+        /// </summary>
+        /// <param name="pageTypeId">The page type id</param>
+        /// <returns>The page model</returns>        
+        public static PageEditModel Create(string pageTypeId)
+        {
+            var type = App.PageTypes.SingleOrDefault(t => t.Id == pageTypeId);
+
+            if (type != null)
+            {
+                var page = Piranha.Models.PageModel.Create(pageTypeId);
+                var model = Module.Mapper.Map<Piranha.Models.PageModelBase, PageEditModel>(page);
+
+                model.PageType = type;
+                LoadRegions(page, model);
+                return model;
+            }
+
+            throw new KeyNotFoundException($"No page type found with the id '{pageTypeId}");
+
+        }
+
+        #region private members
         private static void LoadRegions(Piranha.Models.PageModel src, PageEditModel dest)
         {
             if (dest.PageType != null)
@@ -178,7 +220,8 @@ namespace Piranha.Areas.Manager.Models
                     }
                 }
             }
-        }
+        } 
+        #endregion
     }
 
     #region Helper classes

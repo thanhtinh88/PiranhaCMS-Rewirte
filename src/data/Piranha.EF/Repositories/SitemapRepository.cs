@@ -48,7 +48,7 @@ namespace Piranha.EF.Repositories
         /// <param name="pages">The full page list</param>
         /// <param name="parentId">The current parent id</param>
         /// <returns>The sitemap</returns>
-        private IList<SitemapItem> Sort(List<Page> pages, Guid? parentId = null)
+        private IList<SitemapItem> Sort(List<Page> pages, Guid? parentId = null, int level = 0)
         {
             var result = new List<Models.SitemapItem>();
 
@@ -60,10 +60,11 @@ namespace Piranha.EF.Repositories
                     Title = page.Title,
                     NavigationTitle = page.NavigationTitle,
                     Permalink = page.Slug,
+                    Level = level,
                     Created = page.Created,
                     LastModified = page.LastModified
                 };
-                item.Items = Sort(pages, page.Id);
+                item.Items = Sort(pages, page.Id, level + 1);
                 result.Add(item);
             }
             return result;

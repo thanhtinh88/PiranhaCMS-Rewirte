@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Cryptography;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
@@ -79,6 +80,19 @@ namespace Piranha
             if (slug.StartsWith("-"))
                 slug = slug.Substring(Math.Min(slug.IndexOf("-") + 1, slug.Length));
             return slug;
+        }
+
+
+        public static string GenerateETag(string name, DateTime date)
+        {
+            var encoding = new UTF8Encoding();
+
+            using (var crypto = MD5.Create())
+            {
+                var str = name + date.ToString("yyyy-MM-dd HH:mm:ss");
+                var bytes = crypto.ComputeHash(encoding.GetBytes(str));
+                return Convert.ToBase64String(bytes);
+            }
         }
     }
 }

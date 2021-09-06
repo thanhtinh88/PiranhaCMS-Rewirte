@@ -49,11 +49,22 @@ namespace Piranha.Manager
                 if (fileInfo.Exists)
                 {
                     var headers = context.Response.GetTypedHeaders();
-                    context.Response.ContentType = GetContentType(Path.GetExtension(path));
-                    context.Response.ContentLength = fileInfo.Length;
-                    headers.LastModified = fileInfo.LastModified.ToUniversalTime();
+                    var etag = Utils.GenerateETag(path, Module.LastModified);
 
-                    await context.Response.SendFileAsync(fileInfo);
+                    var etagHeader = context.Request.Headers["If-None-Match"];
+                    if (etagHeader.Count == 0 || etagHeader[0] != etag)
+                    {
+                        context.Response.ContentType = GetContentType(Path.GetExtension(path));
+                        context.Response.ContentLength = fileInfo.Length;
+                        context.Response.Headers["ETag"] = etag;
+                        headers.LastModified = fileInfo.LastModified.ToUniversalTime();
+
+                        await context.Response.SendFileAsync(fileInfo);
+                    }
+                    else
+                    {
+                        context.Response.StatusCode = 304;
+                    }
                 }
                 else
                 {
