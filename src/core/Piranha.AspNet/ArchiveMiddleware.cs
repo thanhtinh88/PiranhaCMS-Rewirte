@@ -15,7 +15,7 @@ namespace Piranha.AspNet
 
         public override async Task Invoke(HttpContext context, IApi api)
         {
-            if (!IsHandled(context))
+            if (!IsHandled(context) && !context.Request.Path.Value.StartsWith("/manager/assets/"))
             {
                 var url = context.Request.Path.HasValue ? context.Request.Path.Value : "";
 
