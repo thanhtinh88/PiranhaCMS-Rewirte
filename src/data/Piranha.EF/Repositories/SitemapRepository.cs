@@ -61,6 +61,7 @@ namespace Piranha.EF.Repositories
                     NavigationTitle = page.NavigationTitle,
                     Permalink = page.Slug,
                     Level = level,
+                    Published = page.Published,
                     Created = page.Created,
                     LastModified = page.LastModified
                 };
