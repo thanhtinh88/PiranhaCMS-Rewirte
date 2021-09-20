@@ -122,10 +122,9 @@ namespace Piranha
                         }
 
                         // Initialize all modules
-                        foreach (var module in this.modules.ToList())
+                        foreach (var module in this.modules)
                         {
                             module.Init();
-                            this.modules.Add(module);
                         }
                         isInitialized = true;
                     }

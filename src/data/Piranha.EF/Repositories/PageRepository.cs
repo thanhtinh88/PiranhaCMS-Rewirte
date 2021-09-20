@@ -12,31 +12,31 @@ using System.Text;
 
 namespace Piranha.EF.Repositories
 {
-    public class PageRepository : RepositoryBase<Data.Page, Models.PageModel>, IPageRepository
+    public class PageRepository : RepositoryBase<Data.Page, Models.DynamicPage>, IPageRepository
     {
         #region Members
         /// <summary>
         /// The current Api.
         /// </summary>
-        private readonly Api api;
+        private readonly DataService service;
         #endregion
 
         /// <summary>
         /// Default constructor.
         /// </summary>
         /// <param name="db">The current db context</param>
-        internal PageRepository(Api api, Db db): base(db)
+        internal PageRepository(DataService service, Db db): base(db)
         {
-            this.api = api;
+            this.service = service;
         }
 
         /// <summary>
         /// Gets the site startpage.
         /// </summary>
         /// <returns>The page model</returns>
-        public PageModel GetStartPage()
+        public Models.DynamicPage GetStartPage()
         {
-            return GetStartPage<Models.PageModel>();
+            return GetStartPage<Models.DynamicPage>();
         }
 
         /// <summary>
@@ -44,7 +44,7 @@ namespace Piranha.EF.Repositories
         /// </summary>
         /// <typeparam name="T">The model type</typeparam>
         /// <returns>The page model</returns>
-        public T GetStartPage<T>() where T : Models.PageModel<T>
+        public T GetStartPage<T>() where T : Models.Page<T>
         {
             var page = Query().FirstOrDefault(p => !p.ParentId.HasValue && p.SortOrder == 0);
 
@@ -58,9 +58,9 @@ namespace Piranha.EF.Repositories
         /// </summary>
         /// <param name="id">The unique id</param>
         /// <returns>The page model</returns>
-        public override PageModel GetById(Guid id)
+        public override Models.DynamicPage GetById(Guid id)
         {
-            return GetById<PageModel>(id);
+            return GetById<Models.DynamicPage>(id);
         }
 
         /// <summary>
@@ -68,7 +68,7 @@ namespace Piranha.EF.Repositories
         /// </summary>
         /// <typeparam name="T">The model type</typeparam>
         /// <param name="id">The unique id</param>
-        public T GetById<T>(Guid id) where T : Models.PageModel<T>
+        public T GetById<T>(Guid id) where T : Models.Page<T>
         {
             var page = Query().FirstOrDefault(p => p.Id == id);
 
@@ -82,9 +82,9 @@ namespace Piranha.EF.Repositories
         /// </summary>
         /// <param name="slug">The unique slug</param>
         /// <returns>The page model</returns>
-        public PageModel GetBySlug(string slug)
+        public Models.DynamicPage GetBySlug(string slug)
         {
-            return GetBySlug<Models.PageModel>(slug);
+            return GetBySlug<Models.DynamicPage>(slug);
         }
 
         /// <summary>
@@ -93,7 +93,7 @@ namespace Piranha.EF.Repositories
         /// <typeparam name="T">The model type</typeparam>
         /// <param name="slug">The unique slug</param>
         /// <returns>The page model</returns>
-        public T GetBySlug<T>(string slug) where T : Models.PageModel<T>
+        public T GetBySlug<T>(string slug) where T : Models.Page<T>
         {
             var page = Query().FirstOrDefault(p => p.Slug == slug);
             if (page != null)
@@ -101,24 +101,24 @@ namespace Piranha.EF.Repositories
             return null;
         }
 
-        public IList<PageModel> GetByParentId(Guid? parentId)
+        public IList<Models.DynamicPage> GetByParentId(Guid? parentId)
         {
-            var result = new List<Models.PageModel>();
+            var result = new List<Models.DynamicPage>();
             var pages = Query()
                 .Where(p => p.ParentId == parentId)
                 .ToArray();
 
             foreach (var page in pages)
             {
-                result.Add(Load<Models.PageModel>(page));
+                result.Add(Load<Models.DynamicPage>(page));
             }
 
             return result;
         }
 
-        public void Save<T>(T model) where T : Models.PageModel<T>
+        public void Save<T>(T model) where T : Models.Page<T>
         {
-            var type = api.PageTypes.GetById(model.TypeId);
+            var type = service.PageTypes.GetById(model.TypeId);
             if (type !=null)
             {
                 var currentRegions = type.Regions.Select(r => r.Id).ToArray();
@@ -138,10 +138,24 @@ namespace Piranha.EF.Repositories
                     };
                     db.Pages.Add(page);
                     model.Id = page.Id;
+
+                    // Make room for the new page
+                    MovePages(model.ParentId, model.SortOrder, true);
+                }
+                else
+                {
+                    // check if the page has been moved
+                    if (page.ParentId != model.ParentId || page.SortOrder != model.SortOrder)
+                    {
+                        // remove the old position for the page
+                        MovePages(page.ParentId, page.SortOrder + 1, false);
+                        // Add room for the new position of the page
+                        MovePages(model.ParentId, model.SortOrder, true);
+                    }
                 }
 
                 // Map basic fields
-                Module.Mapper.Map<Models.PageModelBase, Data.Page>(model, page);
+                Module.Mapper.Map<Models.PageBase, Data.Page>(model, page);
 
                 // Map regions
                 foreach (var regionKey in currentRegions)
@@ -177,6 +191,52 @@ namespace Piranha.EF.Repositories
         }
 
         /// <summary>
+        /// Deletes the given page.
+        /// </summary>
+        /// <typeparam name="T">The model type</typeparam>
+        /// <param name="model">The page to delete</param>
+        public void Delete<T>(T model) where T : Models.Page<T>
+        {
+            Delete(model.Id);
+        }
+
+        /// <summary>
+        /// Delets the page with the specified id.
+        /// </summary>
+        /// <param name="id">The unique id</param>
+        public void Delete(Guid id)
+        {
+            var page = db.Pages.FirstOrDefault(p => p.Id == id);
+            if (page != null)
+            {
+                db.Pages.Remove(page);
+                db.SaveChanges();
+
+                MovePages(page.ParentId, page.SortOrder + 1, false);
+            }
+        }
+
+        /// <summary>
+        /// Moves the current page in the structure.
+        /// </summary>
+        /// <typeparam name="T">The model type</typeparam>
+        /// <param name="model">The page to move</param>
+        /// <param name="parentId">The new parent id</param>
+        /// <param name="sortOrder">The new sort order</param>
+        public void Move<T>(T model, Guid? parentId, int sortOrder) where T: Models.Page<T>
+        {
+            // Remove the old position for the page
+            MovePages(model.ParentId, model.SortOrder + 1, false);
+            // Add room for the new position of the page
+            MovePages(parentId, sortOrder, true);
+            // Update the position of the current page
+            db.Database.ExecuteSqlRaw("UPDATE Piranha_Pages SET ParentId=@p0, SortOrder=P1 WHERE Id=@p2", parentId, sortOrder, model.Id);
+
+            // Sync the db context
+            db.SaveChanges();
+        }
+
+        /// <summary>
         /// Gets the base entity query.
         /// </summary>
         /// <returns>The query</returns>
@@ -195,9 +255,9 @@ namespace Piranha.EF.Repositories
         /// <typeparam name="T">The model type</typeparam>
         /// <param name="page">The data entity</param>
         /// <returns>The page model</returns>
-        private T Load<T>(Data.Page page) where T : Models.PageModel<T>
+        private T Load<T>(Data.Page page) where T : Models.Page<T>
         {
-            var type = api.PageTypes.GetById(page.TypeId);
+            var type = App.PageTypes.FirstOrDefault(t => t.Id == page.TypeId);
 
             if (type != null)
             {
@@ -206,7 +266,7 @@ namespace Piranha.EF.Repositories
                 var currentRegions = type.Regions.Select(r => r.Id).ToArray();
 
                 // Map basic fields
-                Module.Mapper.Map<Data.Page, Models.PageModelBase>(page, model);
+                Module.Mapper.Map<Data.Page, Models.PageBase>(page, model);
 
                 // Map regions
                 foreach (var regionKey in currentRegions)
@@ -266,11 +326,11 @@ namespace Piranha.EF.Repositories
         /// <param name="model">The model</param>
         /// <param name="regionId">The region id</param>
         /// <returns>If the region exists</returns>
-        private bool HasRegion<T>(T model, string regionId) where T : Models.PageModel<T>
+        private bool HasRegion<T>(T model, string regionId) where T : Models.Page<T>
         {
-            if (model is Models.PageModel)
+            if (model is Models.DynamicPage)
             {
-                return ((IDictionary<string, object>)((Models.PageModel)(object)model).Regions).ContainsKey(regionId);
+                return ((IDictionary<string, object>)((Models.DynamicPage)(object)model).Regions).ContainsKey(regionId);
             }
             else
             {
@@ -303,12 +363,12 @@ namespace Piranha.EF.Repositories
         /// <param name="model">The model</param>
         /// <param name="regionId">The region id</param>
         /// <returns>The enumerator</returns>
-        private IEnumerable GetEnumerable<T>(T model, string regionId) where T : PageModel<T>
+        private IEnumerable GetEnumerable<T>(T model, string regionId) where T : Page<T>
         {
             object value = null;
-            if (model is Models.PageModel)
+            if (model is Models.DynamicPage)
             {
-                value = ((IDictionary<string, object>)((Models.PageModel)(object)model).Regions)[regionId];
+                value = ((IDictionary<string, object>)((Models.DynamicPage)(object)model).Regions)[regionId];
             }
             else
             {
@@ -330,11 +390,11 @@ namespace Piranha.EF.Repositories
         /// <param name="model">The model</param>
         /// <param name="regionId">The region id</param>
         /// <returns>The region</returns>
-        private object GetRegion<T>(T model, string regionId) where T : PageModel<T>
+        private object GetRegion<T>(T model, string regionId) where T : Models.Page<T>
         {
-            if (model is Models.PageModel)
+            if (model is Models.DynamicPage)
             {
-                return ((IDictionary<string, object>)((Models.PageModel)(object)model).Regions)[regionId];
+                return ((IDictionary<string, object>)((Models.DynamicPage)(object)model).Regions)[regionId];
             }
             else
             {
@@ -349,15 +409,15 @@ namespace Piranha.EF.Repositories
         /// <param name="model">The model</param>
         /// <param name="regionId">The region id</param>
         /// <param name="field">The field</param>
-        private void SetSimpleValue<T>(T model, string regionId, Data.PageField field) where T : PageModel<T>
+        private void SetSimpleValue<T>(T model, string regionId, Data.PageField field) where T : Models.Page<T>
         {
             var type = App.Fields.GetByType(field.CLRType);
 
             if (type != null)
             {
-                if (model is Models.PageModel)
+                if (model is Models.DynamicPage)
                 {
-                    ((IDictionary<string, object>)((Models.PageModel)(object)model).Regions)[regionId] = 
+                    ((IDictionary<string, object>)((Models.DynamicPage)(object)model).Regions)[regionId] = 
                         JsonConvert.DeserializeObject(field.Value, type.Type);
                 }
                 else
@@ -376,15 +436,15 @@ namespace Piranha.EF.Repositories
         /// <param name="regionId">The region id</param>
         /// <param name="fieldId">The field id</param>
         /// <param name="field">The field</param>
-        private void SetComplexValue<T>(T model, string regionId, string fieldId, Data.PageField field) where T : PageModel<T>
+        private void SetComplexValue<T>(T model, string regionId, string fieldId, Data.PageField field) where T : Page<T>
         {
             var type = App.Fields.GetByType(field.CLRType);
 
             if (type != null)
             {
-                if (model is Models.PageModel)
+                if (model is Models.DynamicPage)
                 {
-                    ((IDictionary<string, object>)((Models.PageModel)(object)model).Regions)[regionId] =
+                    ((IDictionary<string, object>)((Models.DynamicPage)(object)model).Regions)[regionId] =
                         JsonConvert.DeserializeObject(field.Value, type.Type);
                 }
                 else
@@ -404,15 +464,15 @@ namespace Piranha.EF.Repositories
         /// <param name="model">The model</param>
         /// <param name="regionId">The region id</param>
         /// <param name="field">The field</param>
-        private void AddSimpleValue<T>(T model, string regionId, Data.PageField field) where T : PageModel<T>
+        private void AddSimpleValue<T>(T model, string regionId, Data.PageField field) where T : Page<T>
         {
             var type = App.Fields.GetByType(field.CLRType);
 
             if (type != null)
             {
-                if (model is Models.PageModel)
+                if (model is Models.DynamicPage)
                 {
-                    ((IList)((IDictionary<string, object>)((Models.PageModel)(object)model).Regions)[regionId]).Add(
+                    ((IList)((IDictionary<string, object>)((Models.DynamicPage)(object)model).Regions)[regionId]).Add(
                         JsonConvert.DeserializeObject(field.Value, type.Type));
                 }
                 else
@@ -430,12 +490,12 @@ namespace Piranha.EF.Repositories
         /// <param name="model">The model</param>
         /// <param name="regionId">The region id</param>
         /// <param name="fields">The field</param>
-        private void AddComplexValue<T>(T model, string regionId, List<Data.PageField> pageFields) where T : PageModel<T>
+        private void AddComplexValue<T>(T model, string regionId, List<Data.PageField> pageFields) where T : Page<T>
         {
-            if (model is Models.PageModel)
+            if (model is Models.DynamicPage)
             {
-                var list = (IList)((IDictionary<string, object>)((Models.PageModel)(object)model).Regions)[regionId];
-                var obj = Models.PageModel.CreateRegion(model.TypeId, regionId);
+                var list = (IList)((IDictionary<string, object>)((Models.DynamicPage)(object)model).Regions)[regionId];
+                var obj = Models.DynamicPage.CreateRegion(model.TypeId, regionId);
 
                 foreach (var field in pageFields)
                 {
@@ -478,7 +538,7 @@ namespace Piranha.EF.Repositories
         /// <param name="regionType">The region type</param>
         /// <param name="regionId">The region id</param>
         /// <param name="sortOrder">The optional sort order</param>
-        private void MapRegion<T>(T model, Data.Page page, object region, Extend.RegionType regionType, string regionId, int sortOrder = 0) where T : PageModel<T>
+        private void MapRegion<T>(T model, Data.Page page, object region, Extend.RegionType regionType, string regionId, int sortOrder = 0) where T : Page<T>
         {
             // Now map all of ther fields
             for (int n = 0; n < regionType.Fields.Count; n++)
@@ -531,7 +591,25 @@ namespace Piranha.EF.Repositories
             }
         }
 
-
+        /// <summary>
+        /// Moves the pages around. This is done when a page is deleted or moved in the structure.
+        /// </summary>
+        /// <param name="parentId">The parent id</param>
+        /// <param name="sortOrder">The sort order</param>
+        /// <param name="increase">If sort order should be increase or decreased</param>
+        private void MovePages(Guid? parentId, int sortOrder, bool increase)
+        {
+            if (parentId.HasValue)
+            {
+                db.Database.ExecuteSqlRaw("UPDATE Piranha_Pages SET SortOrder = SortOrder " + (increase ? "+ 1" : "- 1") +
+                    " WHERE ParentId = @p0 AND SortOrder >= @p1", parentId.Value, sortOrder);
+            }
+            else
+            {
+                db.Database.ExecuteSqlRaw("UPDATE Piranha_Pages SET SortOrder = SortOrder " + (increase ? "+ 1" : "- 1") +
+                    " WHERE ParentId IS NULL AND SortOrder >= @p0", sortOrder);
+            }
+        }
         #endregion
     }
 }

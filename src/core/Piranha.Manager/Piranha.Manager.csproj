@@ -15,7 +15,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Content Remove="Areas\Manager\Views\BlockType\List.cshtml" />
     <Content Remove="Areas\Manager\Views\Block\List.cshtml" />
+    <Content Remove="Areas\Manager\Views\Page\Partial\_Sitemap.cshtml" />
   </ItemGroup>
 
   <ItemGroup>

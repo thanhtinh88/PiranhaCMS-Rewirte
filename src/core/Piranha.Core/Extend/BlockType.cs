@@ -26,6 +26,8 @@ namespace Piranha.Extend
 
             foreach (var region in Regions)
             {
+                region.Title = region.Title ?? region.Id;
+
                 if (region.Fields.Select(r => r.Id).Distinct().Count() != region.Fields.Count)
                     throw new Exception($"Field Id not unique for block type {Id}");
 

@@ -4,10 +4,16 @@
 }
 
 <h1>@Model.Title</h1>
-
-@*<p class="lead">@Model.Intro.Title.Value</p>
+<p class="lead">@Model.Intro.Title?.Value</p>
 <p>
     @Model.Intro.Body.Value
-</p>*@
+</p>
 <hr />
-@Model.Content;
+<ul>
+    @foreach (var field in Piranha.App.Fields)
+    {
+        <li>@field.Name, @field.Shorthand, @field.CLRType, @field.Type.FullName</li>
+    }
+</ul>
+
+@Model.Content.GetValue();

@@ -10,32 +10,10 @@ namespace Piranha.Models
     /// <summary>
     /// Dynamic page model.
     /// </summary>
-    public class PageModel : PageModel<PageModel>
+    public class Page<T> : PageBase where T: Page<T>
     {
         #region Properties
-        /// <summary>
-        /// Gets/ sets the regions.
-        /// </summary>
-        public dynamic Regions { get; set; }
-        #endregion
-
-        public PageModel() : base()
-        {
-            Regions = new ExpandoObject();
-        }
-    }
-
-    /// <summary>
-    /// Generic page model.
-    /// </summary>
-    /// <typeparam name="T">The model type</typeparam>
-    public class PageModel<T>: PageModelBase where T: PageModel<T>
-    {
-        #region Properties
-        /// <summary>
-        /// Gets if this is the startpage of the site.
-        /// </summary>
-        public bool IsStartPage
+        public bool IsStartPage 
         {
             get { return !ParentId.HasValue && SortOrder == 0; }
         }
@@ -67,9 +45,10 @@ namespace Piranha.Models
                 return factory.CreateRegion(typeId, regionId);
             }
         }
+
     }
 
-    public abstract class PageModelBase: Content
+    public abstract class PageBase: Content
     {
         #region Properties
         /// <summary>

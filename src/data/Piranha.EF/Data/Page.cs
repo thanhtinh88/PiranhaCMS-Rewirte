@@ -77,7 +77,7 @@ namespace Piranha.EF.Data
         /// <summary>
         /// Gets/sets the page type.
         /// </summary>
-        public PageType PageType { get; set; }
+        public PageType Type { get; set; }
 
         /// <summary>
         /// Gets/sets the available fields.

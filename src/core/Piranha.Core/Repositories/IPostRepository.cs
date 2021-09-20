@@ -14,14 +14,14 @@ namespace Piranha.Repositories
 		/// </summary>
 		/// <param name="id">The unique id</param>
 		/// <returns>The post model</returns>
-        PostModel GetById(Guid id);
+        Post GetById(Guid id);
 
         /// <summary>
 		/// Gets the post model with the specified id.
 		/// </summary>
 		/// <param name="id">The unique id</param>
 		/// <returns>The post model</returns>
-        T GetById<T>(Guid id) where T : PostModel;
+        T GetById<T>(Guid id) where T : Post;
 
 		/// <summary>
 		/// Gets the post models that matches the given
@@ -29,7 +29,7 @@ namespace Piranha.Repositories
 		/// </summary>
 		/// <param name="id">The id array</param>
 		/// <returns>The post models</returns>
-		IList<PostModel> GetById(Guid[] id);
+		IList<Post> GetById(Guid[] id);
 
 		/// <summary>
 		/// Gets the post models that matches the given
@@ -37,7 +37,7 @@ namespace Piranha.Repositories
 		/// </summary>
 		/// <param name="id">The id array</param>
 		/// <returns>The post models</returns>
-		IList<T> GetById<T>(Guid[] id) where T : PostModel;
+		IList<T> GetById<T>(Guid[] id) where T : Post;
 
 		/// <summary>
 		/// Gets the post model with the specified slug.
@@ -45,7 +45,7 @@ namespace Piranha.Repositories
 		/// <param name="category">The unique category slug</param>
 		/// <param name="slug">The unique slug</param>
 		/// <returns>The post model</returns>
-		PostModel GetBySlug(string category, string slug);
+		Post GetBySlug(string category, string slug);
 
 		/// <summary>
 		/// Gets the post model with the specified slug.
@@ -53,7 +53,7 @@ namespace Piranha.Repositories
 		/// <param name="categoryId">The category id</param>
 		/// <param name="slug">The unique slug</param>
 		/// <returns>The post model</returns>
-		T GetBySlug<T>(string category, string slug) where T : PostModel;
+		T GetBySlug<T>(string category, string slug) where T : Post;
 
     }
 }

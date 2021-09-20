@@ -59,7 +59,7 @@ namespace Piranha.Areas.Manager.Controllers
         /// </summary>
         /// <param name="model">The page model</param>
         [HttpPost]
-        [ValidateAntiForgeryToken]
+        //[ValidateAntiForgeryToken]
         [Route("manager/page/save")]
         public IActionResult Save(Models.PageEditModel model)
         {
@@ -72,11 +72,83 @@ namespace Piranha.Areas.Manager.Controllers
         /// Saves and publishes the given page model.
         /// </summary>
         /// <param name="model">The page model</param>
+        [HttpPost]
+        [Route("manager/page/publish")]
         public IActionResult Publish(Models.PageEditModel model)
         {
             if (model.Save(api, true))
                 return RedirectToAction("List");
             return View(model);
         }
+
+        /// <summary>
+        /// Saves and unpublishes the given page model.
+        /// </summary>
+        /// <param name="model">The page model</param>
+        [HttpPost]
+        [Route("manager/page/unpublish")]
+        public IActionResult UnPublish(Models.PageEditModel model)
+        {
+            if (model.Save(api, false))
+            {
+                return RedirectToAction("List");
+            }
+
+            return View(model);
+        }
+
+        /// <summary>
+        /// Moves a page to match the given structure.
+        /// </summary>
+        /// <param name="structure">The page structure</param>
+        [HttpPost]
+        [Route("manager/page/move")]
+        public IActionResult Move([FromBody]Models.PageStructureModel structure)
+        {
+            for (int n = 0; n < structure.Items.Count; n++)
+            {
+                var moved = MovePage(structure.Items[n], n);
+                if (moved)
+                    break;
+            }
+            return View("Partial/_Sitemap", api.Sitemap.Get(false));
+        }
+
+        /// <summary>
+        /// Deletes the page with the given id.
+        /// </summary>
+        /// <param name="id">The unique id</param>
+        [Route("manager/page/delete/{id:Guid}")]
+        public IActionResult Delete(Guid id)
+        {
+            api.Pages.Delete(id);
+            return RedirectToAction("List");
+        }
+
+        #region private methods
+        private bool MovePage(Models.PageStructureModel.PageStructureItem page, int sortOrder = 1, Guid? parentId = null)
+        {
+            var model = api.Pages.GetById(page.Id);
+            if (model != null)
+            {
+                if (model.ParentId != parentId || model.SortOrder != sortOrder)
+                {
+                    // Move the page in the structure
+                    api.Pages.Move(model, parentId, sortOrder);
+
+                    // We only move one page at a time so we're done
+                    return true;
+                }
+
+                for (int n = 0; n < page.Children.Count; n++)
+                {
+                    var moved = MovePage(page.Children[n], n, page.Id);
+                    if (moved)
+                        return true;
+                }
+            }
+            return false;
+        }
+        #endregion
     }
 }

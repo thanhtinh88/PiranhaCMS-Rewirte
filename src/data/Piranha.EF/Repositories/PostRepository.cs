@@ -11,7 +11,7 @@ namespace Piranha.EF.Repositories
     /// <summary>
     /// The client post repository.
     /// </summary>
-    public class PostRepository : RepositoryBase<Data.Post, Models.PostModel>, IPostRepository
+    public class PostRepository : RepositoryBase<Data.Post, Models.Post>, IPostRepository
     {
         internal PostRepository(Db db) : base(db) { }
 
@@ -20,7 +20,7 @@ namespace Piranha.EF.Repositories
 		/// </summary>
 		/// <param name="id">The unique id</param>
 		/// <returns>The post model</returns>
-        public T GetById<T>(Guid id) where T : Models.PostModel
+        public T GetById<T>(Guid id) where T : Models.Post
         {
             var post = Query()
                 .Where(p => p.Id == id && p.Published <= DateTime.Now)
@@ -36,9 +36,9 @@ namespace Piranha.EF.Repositories
 		/// </summary>
 		/// <param name="id">The id array</param>
 		/// <returns>The post models</returns>
-        public IList<Models.PostModel> GetById(Guid[] id)
+        public IList<Models.Post> GetById(Guid[] id)
         {
-            return GetById<Models.PostModel>(id);
+            return GetById<Models.Post>(id);
         }
 
         /// <summary>
@@ -46,7 +46,7 @@ namespace Piranha.EF.Repositories
         /// </summary>
         /// <param name="id">The id array</param>
         /// <returns>The post models</returns>
-        public IList<T> GetById<T>(Guid[] id) where T: Models.PostModel
+        public IList<T> GetById<T>(Guid[] id) where T: Models.Post
         {
             var models = new List<T>();
             var result = Query().Where(p => id.Contains(p.Id)).ToList();
@@ -60,9 +60,9 @@ namespace Piranha.EF.Repositories
         }
 
 
-        public Models.PostModel GetBySlug(string category, string slug)
+        public Models.Post GetBySlug(string category, string slug)
         {
-            return GetBySlug<Models.PostModel>(category, slug);
+            return GetBySlug<Models.Post>(category, slug);
         }
 
         /// <summary>
@@ -71,7 +71,7 @@ namespace Piranha.EF.Repositories
 		/// <param name="category">The category id</param>
 		/// <param name="slug">The unique slug</param>
 		/// <returns>The post model</returns>
-        public T GetBySlug<T>(string category, string slug) where T : Models.PostModel
+        public T GetBySlug<T>(string category, string slug) where T : Models.Post
         {
             var post = Query()
                 .Where(p => p.Category.Slug == category && p.Slug == slug && p.Published <= DateTime.Now)
@@ -94,11 +94,11 @@ namespace Piranha.EF.Repositories
         /// </summary>
         /// <param name="post">The post</param>
         /// <returns>The transformed model</returns>
-        private T Map<T>(Post post) where T : Models.PostModel
+        private T Map<T>(Post post) where T : Models.Post
         {
             var model = Activator.CreateInstance<T>();
             // Map basic fields
-            Module.Mapper.Map<Data.Post, Models.PostModel>(post, model);
+            Module.Mapper.Map<Data.Post, Models.Post>(post, model);
 
             // Map category
             model.Category = Module.Mapper.Map<Data.Category, Models.Category>(post.Category);

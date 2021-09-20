@@ -14,7 +14,7 @@ namespace Piranha.Extend
         public string Route { get; set; }
         #endregion
 
-        internal PageType() : base() { }
+        public PageType() : base() { }
 
         public void Ensure()
         {

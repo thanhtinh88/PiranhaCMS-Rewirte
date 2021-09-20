@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Piranha.EF
 {
-    public class Api : IApi
+    public class DataService : IDataService
     {
         #region Members
         /// <summary>
@@ -50,7 +50,7 @@ namespace Piranha.EF
         public ISitemapRepository Sitemap { get; private set; }
         #endregion
 
-        public Api(Db db)
+        public DataService(Db db)
         {
             var builder = new DbContextOptionsBuilder<Db>();
             Module.DbConfig(builder);

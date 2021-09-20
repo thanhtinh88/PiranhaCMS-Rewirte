@@ -9,7 +9,7 @@ namespace Piranha.EF.Repositories
     /// <summary>
     /// The client category repository.
     /// </summary>
-    public class CategoryRepository : RepositoryBase<Data.Category, Models.Category>, ICategoryRepository
+    public class CategoryRepository : RepositoryBase<Data.Category, Models.CategoryItem>, ICategoryRepository
     {
         internal CategoryRepository(Db db) : base(db) { }
 
@@ -18,7 +18,7 @@ namespace Piranha.EF.Repositories
 		/// </summary>
 		/// <param name="slug">The unique slug</param>
 		/// <returns>The category</returns>
-        public Models.Category GetBySlug(string slug)
+        public Models.CategoryItem GetBySlug(string slug)
         {
             var result = Query().FirstOrDefault(c => c.Slug == slug);
                         
@@ -32,7 +32,7 @@ namespace Piranha.EF.Repositories
 		/// </summary>
 		/// <param name="id">The unique id</param>
 		/// <returns>The category</returns>
-        public Models.CategoryModel GetModelById(Guid id)
+        public Models.Category GetModelById(Guid id)
         {
             var result = Query().FirstOrDefault(c => c.Id == id);
 
@@ -46,7 +46,7 @@ namespace Piranha.EF.Repositories
 		/// </summary>
 		/// <param name="slug">The unique slug</param>
 		/// <returns>The category</returns>
-        public Models.CategoryModel GetModelBySlug(string slug)
+        public Models.Category GetModelBySlug(string slug)
         {
             var result = Query().FirstOrDefault(c => c.Slug == slug);
 
@@ -59,6 +59,27 @@ namespace Piranha.EF.Repositories
 		/// Saves the category.
 		/// </summary>
 		/// <param name="model">The category</param>
+        public void Save(Models.CategoryItem model)
+        {
+            var category = db.Categories.FirstOrDefault(c => c.Id == model.Id);
+            if (category == null)
+            {
+                category = new Data.Category()
+                {
+                    Id = Guid.NewGuid()
+                };
+
+                db.Categories.Add(category);
+                model.Id = category.Id;
+            }
+            Module.Mapper.Map<Models.CategoryItem, Data.Category>(model, category);
+            db.SaveChanges();
+        }
+
+        /// <summary>
+		/// Saves the full category model.
+		/// </summary>
+		/// <param name="model">The full model</param>
         public void Save(Models.Category model)
         {
             var category = db.Categories.FirstOrDefault(c => c.Id == model.Id);
@@ -68,32 +89,11 @@ namespace Piranha.EF.Repositories
                 {
                     Id = Guid.NewGuid()
                 };
-
                 db.Categories.Add(category);
                 model.Id = category.Id;
             }
+
             Module.Mapper.Map<Models.Category, Data.Category>(model, category);
-            db.SaveChanges();
-        }
-
-        /// <summary>
-		/// Saves the full category model.
-		/// </summary>
-		/// <param name="model">The full model</param>
-        public void Save(Models.CategoryModel model)
-        {
-            var category = db.Categories.FirstOrDefault(c => c.Id == model.Id);
-            if (category == null)
-            {
-                category = new Data.Category()
-                {
-                    Id = Guid.NewGuid()
-                };
-                db.Categories.Add(category);
-                model.Id = category.Id;
-            }
-
-            Module.Mapper.Map<Models.CategoryModel, Data.Category>(model, category);
             db.SaveChanges();
         }
 
@@ -102,9 +102,9 @@ namespace Piranha.EF.Repositories
 		/// </summary>
 		/// <param name="result">The result</param>
 		/// <returns>The model</returns>
-        public Models.CategoryModel MapModel(Data.Category result)
+        public Models.Category MapModel(Data.Category result)
         {
-            return Module.Mapper.Map<Data.Category, Models.CategoryModel>(result);
+            return Module.Mapper.Map<Data.Category, Models.Category>(result);
         }
     }
 }

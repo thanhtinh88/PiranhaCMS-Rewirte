@@ -9,7 +9,7 @@ namespace Piranha.Models
     /// <summary>
     /// The client post model.
     /// </summary>
-    public class PostModel
+    public class Post
     {
         #region Properties
         /// <summary>
@@ -26,6 +26,11 @@ namespace Piranha.Models
         /// Gets/sets the unique slug.
         /// </summary>
         public string Slug { get; set; }
+
+        /// <summary>
+        /// Gets/sets the full permalink for the post.
+        /// </summary>
+        public string Permalink { get; set; }
 
         /// <summary>
         /// Gets/sets the optional meta keywords.
@@ -68,21 +73,16 @@ namespace Piranha.Models
         public DateTime LastModified { get; set; }
 
         /// <summary>
-        /// Gets/sets the public permalink.
+        /// Gets/sets the post category.
         /// </summary>
-        public string Permalink { get; set; }
-
-        /// <summary>
-        /// Gets/sets the category.
-        /// </summary>
-        public Category Category { get; set; }
+        public CategoryItem Category { get; set; }
 
         /// <summary>
         /// Gets/sets the available regions.
         /// </summary>
         public IList<Tag> Tags { get; set; }
         #endregion
-        public PostModel()
+        public Post()
         {
             Tags = new List<Tag>();
         }

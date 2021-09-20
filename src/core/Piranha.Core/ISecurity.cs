@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Piranha.Repositories
+namespace Piranha
 {
     /// <summary>
     /// Interface for the security manager.

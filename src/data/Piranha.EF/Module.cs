@@ -30,10 +30,10 @@ namespace Piranha.EF
         {
             var config = new MapperConfiguration(cfg =>
             {
+                cfg.CreateMap<Data.Category, Models.CategoryItem>();
                 cfg.CreateMap<Data.Category, Models.Category>();
-                cfg.CreateMap<Data.Category, Models.CategoryModel>();
 
-                cfg.CreateMap<Models.Category, Data.Category>()
+                cfg.CreateMap<Models.CategoryItem, Data.Category>()
                     .ForMember(m => m.Id, o => o.Ignore())
                     .ForMember(m => m.ArchiveTitle, o => o.Ignore())
                     .ForMember(m => m.ArchiveKeywords, o => o.Ignore())
@@ -41,20 +41,20 @@ namespace Piranha.EF
                     .ForMember(m => m.ArchiveRoute, o => o.Ignore())
                     .ForMember(m => m.Created, o => o.Ignore())
                     .ForMember(m => m.LastModified, o => o.Ignore());
-                cfg.CreateMap<Models.CategoryModel, Data.Category>()
+                cfg.CreateMap<Models.Category, Data.Category>()
                     .ForMember(m => m.Id, o => o.Ignore())
                     .ForMember(m => m.Created, o => o.Ignore())
                     .ForMember(m => m.LastModified, o => o.Ignore());
 
-                cfg.CreateMap<Data.Page, Models.PageModelBase>();
-                cfg.CreateMap<Models.PageModelBase, Data.Page>()
+                cfg.CreateMap<Data.Page, Models.PageBase>();
+                cfg.CreateMap<Models.PageBase, Data.Page>()
                     .ForMember(m => m.Id, o => o.Ignore())
                     .ForMember(m => m.Created, o => o.Ignore())
                     .ForMember(m => m.LastModified, o => o.Ignore())
-                    .ForMember(m => m.PageType, o => o.Ignore())
+                    .ForMember(m => m.Type, o => o.Ignore())
                     .ForMember(m => m.Fields, o => o.Ignore());
 
-                cfg.CreateMap<Data.Post, Models.PostModel>()
+                cfg.CreateMap<Data.Post, Models.Post>()
                     .ForMember(m => m.Permalink, o => o.MapFrom(p => p.Category.Slug + "/" + p.Slug))
                     .ForMember(m => m.Category, o => o.Ignore())
                     .ForMember(m => m.Tags, o => o.Ignore());

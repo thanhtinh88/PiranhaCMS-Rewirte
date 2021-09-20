@@ -23,6 +23,6 @@ namespace Piranha.Extend
         public string Type { get; set; }
         #endregion
 
-        internal FieldType() { }
+        public FieldType() { }
     }
 }

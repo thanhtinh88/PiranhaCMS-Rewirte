@@ -26,7 +26,7 @@ namespace Piranha.Models
         /// <returns>The new item</returns>
         public T Create()
         {
-            return (T)PageModel.CreateRegion(TypeId, RegionId);
+            return (T)DynamicPage.CreateRegion(TypeId, RegionId);
         }
 
         /// <summary>
@@ -40,6 +40,10 @@ namespace Piranha.Models
             return item;
         }
 
+        /// <summary>
+        /// Adds a new item to the region list
+        /// </summary>
+        /// <param name="item">The item</param>
         public void Add(object item)
         {
             if (item.GetType() == typeof(T))

@@ -23,12 +23,22 @@ namespace Piranha.Extend
         public bool Collection { get; set; }
 
         /// <summary>
+        /// Gets/sets the maximum number of items if this is a collection.
+        /// </summary>
+        public int Max { get; set; }
+
+        /// <summary>
+        /// Gets/sets the minimum number of items if this is a collection.
+        /// </summary>
+        public int Min { get; set; }
+
+        /// <summary>
         /// Gets/sets the available fields.
         /// </summary>
         public IList<FieldType> Fields { get; set; }
         #endregion
 
-        internal RegionType()
+        public RegionType()
         {
             Fields = new List<FieldType>();
         }

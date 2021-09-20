@@ -98,8 +98,5 @@ namespace Piranha.EF.Repositories
                 db.SaveChanges();
             }
         }
-
-
-
     }
 }

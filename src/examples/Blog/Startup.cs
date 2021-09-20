@@ -47,6 +47,11 @@ namespace Blog
             //services.AddPiranhaEF(options => options.UseSqlServer(Configuration["Data:Piranha:ConnectionString"]));
             services.AddPiranhaEF(options => options.UseSqlite("Filename=./blog.db"));
             services.AddPiranhaManager();
+            services.AddScoped<IApi, Api>();
+            services.AddLogging(loggingOptions =>
+            {
+                loggingOptions.AddConsole();
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -63,15 +68,19 @@ namespace Blog
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
+                        
+            App.Init(api);
 
+            // Build types
             var pageTypeBuilder = new Piranha.Builder.Json.PageTypeBuilder(api)
                 .AddJsonFile("piranha.json");
             pageTypeBuilder.Buid();
             var blockTypeBuilder = new Piranha.Builder.Json.BlockTypeBuilder(api)
                 .AddJsonFile("piranha.json");
             blockTypeBuilder.Build();
-
-            App.Init(api);
+            var attrTypeBuilder = new Piranha.Builder.Attribute.PageTypeBuilder(api, loggerFactory)
+                .AddType(typeof(Models.TestPageModel));
+            attrTypeBuilder.Build();
 
             app.UseHttpsRedirection();
             app.UseStaticFiles();

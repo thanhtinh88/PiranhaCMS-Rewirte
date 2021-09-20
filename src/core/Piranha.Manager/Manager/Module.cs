@@ -31,10 +31,10 @@ namespace Piranha.Manager
         {
             var config = new MapperConfiguration(cfg =>
             {
-                cfg.CreateMap<Models.PageModelBase, Piranha.Areas.Manager.Models.PageEditModel>()
+                cfg.CreateMap<Models.PageBase, Piranha.Areas.Manager.Models.PageEditModel>()
                     .ForMember(m => m.PageType, o => o.Ignore())
                     .ForMember(m => m.Regions, o => o.Ignore());
-                cfg.CreateMap<Piranha.Areas.Manager.Models.PageEditModel, Models.PageModelBase>()
+                cfg.CreateMap<Piranha.Areas.Manager.Models.PageEditModel, Models.PageBase>()
                     .ForMember(m => m.TypeId, o => o.Ignore())
                     .ForMember(m => m.Created, o => o.Ignore())
                     .ForMember(m => m.LastModified, o => o.Ignore());

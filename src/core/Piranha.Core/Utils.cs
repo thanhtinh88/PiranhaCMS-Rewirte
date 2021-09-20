@@ -83,6 +83,12 @@ namespace Piranha
         }
 
 
+        /// <summary>
+        /// Generates a ETag from the given name and date.
+        /// </summary>
+        /// <param name="name">The resource name</param>
+        /// <param name="date">The modification date</param>
+        /// <returns>The etag</returns>
         public static string GenerateETag(string name, DateTime date)
         {
             var encoding = new UTF8Encoding();
