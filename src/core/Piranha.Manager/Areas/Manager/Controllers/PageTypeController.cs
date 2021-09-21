@@ -7,19 +7,9 @@ using System.Threading.Tasks;
 namespace Piranha.Areas.Manager.Controllers
 {
     [Area("Manager")]
-    public class PageTypeController : Controller
+    public class PageTypeController : ManagerAreaControllerBase
     {
-        #region members
-        /// <summary>
-        /// The current api.
-        /// </summary>
-        private IApi api; 
-        #endregion
-
-        public PageTypeController(IApi api)
-        {
-            this.api = api;
-        }
+        public PageTypeController(IApi api) : base(api) { }
 
         /// <summary>
         /// Gets the list view for the page types.

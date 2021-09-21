@@ -55,6 +55,23 @@ namespace Piranha.EF.Repositories
             return null;
         }
 
+        public IList<Models.CategoryItem> Get(Guid id)
+        {
+            var result = new List<Models.CategoryItem>();
+            var models = Query().OrderBy(c => c.Title).ToList();
+
+            foreach (var category in models)
+            {
+                var model = Map(category);
+                if (model != null)
+                {
+                    result.Add(model);
+                }
+            }
+
+            return result;
+        }
+
         /// <summary>
 		/// Saves the category.
 		/// </summary>

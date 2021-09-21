@@ -14,7 +14,7 @@ namespace Piranha.Extend
         public string View { get; set; }
         #endregion
 
-        internal BlockType() : base() { }
+        public BlockType() : base() { }
 
         /// <summary>
         /// Validates that the page type is correctly defined.

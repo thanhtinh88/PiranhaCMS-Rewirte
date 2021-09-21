@@ -7,27 +7,17 @@ using System.Threading.Tasks;
 namespace Piranha.Areas.Manager.Controllers
 {
     [Area("Manager")]
-    public class PageController : Controller
+    public class PageController : ManagerAreaControllerBase
     {
-        #region Members
-        /// <summary>
-        /// The current api.
-        /// </summary>
-        private readonly IApi api;
-        #endregion
-
-        public PageController(IApi api)
-        {
-            this.api = api;
-        }
+        public PageController(IApi api) : base (api) { }
 
         /// <summary>
         /// Gets the list view for the pages.
         /// </summary>
         [Route("manager/pages")]
-        public IActionResult List()
+        public ViewResult List()
         {
-            return View(Models.PageListModel.Get(api));
+            return View(Models.PageListModel.Get(_api));
         }
 
         /// <summary>
@@ -37,7 +27,7 @@ namespace Piranha.Areas.Manager.Controllers
         [Route("manager/page/{id:Guid}")]
         public IActionResult Edit(Guid id)
         {
-            return View(Models.PageEditModel.GetById(api, id));
+            return View(Models.PageEditModel.GetById(_api, id));
         }
 
         /// <summary>
@@ -47,7 +37,7 @@ namespace Piranha.Areas.Manager.Controllers
         [Route("manager/page/add/{type}")]
         public IActionResult Add(string type)
         {
-            var sitemap = api.Sitemap.Get(false);
+            var sitemap = _api.Sitemap.Get(false);
             var model = Models.PageEditModel.Create(type);
             model.SortOrder = sitemap.Count;
 
@@ -63,7 +53,7 @@ namespace Piranha.Areas.Manager.Controllers
         [Route("manager/page/save")]
         public IActionResult Save(Models.PageEditModel model)
         {
-            if (model.Save(api))
+            if (model.Save(_api))
                 return RedirectToAction("List");
             return View(model);
         }
@@ -76,7 +66,7 @@ namespace Piranha.Areas.Manager.Controllers
         [Route("manager/page/publish")]
         public IActionResult Publish(Models.PageEditModel model)
         {
-            if (model.Save(api, true))
+            if (model.Save(_api, true))
                 return RedirectToAction("List");
             return View(model);
         }
@@ -89,7 +79,7 @@ namespace Piranha.Areas.Manager.Controllers
         [Route("manager/page/unpublish")]
         public IActionResult UnPublish(Models.PageEditModel model)
         {
-            if (model.Save(api, false))
+            if (model.Save(_api, false))
             {
                 return RedirectToAction("List");
             }
@@ -111,7 +101,7 @@ namespace Piranha.Areas.Manager.Controllers
                 if (moved)
                     break;
             }
-            return View("Partial/_Sitemap", api.Sitemap.Get(false));
+            return View("Partial/_Sitemap", _api.Sitemap.Get(false));
         }
 
         /// <summary>
@@ -121,20 +111,20 @@ namespace Piranha.Areas.Manager.Controllers
         [Route("manager/page/delete/{id:Guid}")]
         public IActionResult Delete(Guid id)
         {
-            api.Pages.Delete(id);
+            _api.Pages.Delete(id);
             return RedirectToAction("List");
         }
 
         #region private methods
         private bool MovePage(Models.PageStructureModel.PageStructureItem page, int sortOrder = 1, Guid? parentId = null)
         {
-            var model = api.Pages.GetById(page.Id);
+            var model = _api.Pages.GetById(page.Id);
             if (model != null)
             {
                 if (model.ParentId != parentId || model.SortOrder != sortOrder)
                 {
                     // Move the page in the structure
-                    api.Pages.Move(model, parentId, sortOrder);
+                    _api.Pages.Move(model, parentId, sortOrder);
 
                     // We only move one page at a time so we're done
                     return true;

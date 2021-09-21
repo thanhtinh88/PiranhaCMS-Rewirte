@@ -95,7 +95,6 @@ namespace Piranha
             instance.Initialize(api, modules);
         }
 
-        #region Private methods
         /// <summary>
         /// Initializes the application instance.
         /// </summary>
@@ -114,23 +113,32 @@ namespace Piranha
                         
                         // Get page types
                         pageTypes = api.PageTypes.Get();
+                        blockTypes = api.BlockTypes.Get();
 
-                        // Add ad-hoc modules
-                        foreach (var module in modules)
-                        {
-                            this.modules.Add(module);
-                        }
+                        InitializeModules(modules);
 
-                        // Initialize all modules
-                        foreach (var module in this.modules)
-                        {
-                            module.Init();
-                        }
                         isInitialized = true;
                     }
                 }
             }
         }
-        #endregion
+
+        private void InitializeModules(Extend.IModule[] modules)
+        {
+            // Add modules if present
+            if (modules!= null)
+            {
+                foreach (var module in modules)
+                {
+                    this.modules.Add(module);
+                }
+            }
+
+            // Initialize all modules
+            foreach (var module in this.modules)
+            {
+                module.Init();
+            }
+        }
     }
 }

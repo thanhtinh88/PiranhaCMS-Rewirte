@@ -1,5 +1,6 @@
 ﻿using Piranha.Models;
 using System;
+using System.Collections.Generic;
 
 namespace Piranha.Repositories
 {
@@ -35,6 +36,13 @@ namespace Piranha.Repositories
 		/// <param name="slug">The unique slug</param>
 		/// <returns>The category</returns>
 		Category GetModelBySlug(string slug);
+
+		/// <summary>
+		/// Gets the available categories.
+		/// </summary>
+		/// <param name="id">The unique id</param>
+		/// <returns>The category</returns>
+		IList<CategoryItem> Get(Guid id);
 
 		/// <summary>
 		/// Saves the category.

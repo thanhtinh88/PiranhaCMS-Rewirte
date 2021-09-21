@@ -7,19 +7,9 @@ using System.Threading.Tasks;
 namespace Piranha.Areas.Manager.Controllers
 {
     [Area("Manager")]
-    public class PostController : Controller
+    public class PostController : ManagerAreaControllerBase
     {
-        #region Members
-        /// <summary>
-        /// The current api.
-        /// </summary>
-        private IApi api; 
-        #endregion
-
-        public PostController(IApi api)
-        {
-            this.api = api;
-        }
+        public PostController(IApi api): base(api) { }
 
         [Route("manager/posts")]
         public IActionResult List()

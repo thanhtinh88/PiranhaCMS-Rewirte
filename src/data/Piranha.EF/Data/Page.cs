@@ -58,6 +58,11 @@ namespace Piranha.EF.Data
         public string Route { get; set; }
 
         /// <summary>
+        /// Gets/sets the optional view.
+        /// </summary>
+        public string View { get; set; }
+
+        /// <summary>
         /// Gets/sets the published date.
         /// </summary>
         public DateTime? Published { get; set; }

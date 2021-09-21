@@ -27,7 +27,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Piranha.Azure", "src\env\Pi
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Blog", "src\examples\Blog\Blog.csproj", "{CC230E21-E54C-495B-BB58-376428112363}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Piranha.Builder.Attribute", "src\core\Piranha.Builder.Attribute\Piranha.Builder.Attribute.csproj", "{A7C953CA-05E8-4F6F-BD45-95BC05E5B673}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Piranha.Builder.Attribute", "src\core\Piranha.Builder.Attribute\Piranha.Builder.Attribute.csproj", "{A7C953CA-05E8-4F6F-BD45-95BC05E5B673}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

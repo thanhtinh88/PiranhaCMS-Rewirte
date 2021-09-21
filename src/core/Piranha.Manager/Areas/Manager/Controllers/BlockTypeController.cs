@@ -4,28 +4,22 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Piranha.Manager.Areas.Manager.Controllers
+namespace Piranha.Areas.Manager.Controllers
 {
     [Area("Manager")]
-    public class BlockTypeController : Controller
+    public class BlockTypeController : ManagerAreaControllerBase
     {
-        #region Members
-        /// <summary>
-        /// The current api.
-        /// </summary>
-        private IApi api;
-        #endregion
 
-        public BlockTypeController(IApi api)
+        public BlockTypeController(IApi api) : base(api)
         {
-            this.api = api;
+
         }
 
         /// <summary>
         /// Gets the list view for the block types.
         /// </summary>
         [Route("manager/blocktypes")]
-        public IActionResult List()
+        public ViewResult List()
         {
             return View(App.BlockTypes);
         }
@@ -34,7 +28,7 @@ namespace Piranha.Manager.Areas.Manager.Controllers
         /// Gets the edit view for the specified block type.
         /// </summary>
         [Route("manager/blocktype/{id}")]
-        public IActionResult Edit(string id)
+        public ViewResult Edit(string id)
         {
             return View(App.BlockTypes.SingleOrDefault(t => t.Id.ToLower() == id.ToLower()));
         }

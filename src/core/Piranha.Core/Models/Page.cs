@@ -86,6 +86,11 @@ namespace Piranha.Models
         /// </summary>
         public string Route { get; set; }
 
+        /// <summary>
+        /// Gets/sets the optional view.
+        /// </summary>
+        public string View { get; set; }
+
         #endregion
     }
 }
